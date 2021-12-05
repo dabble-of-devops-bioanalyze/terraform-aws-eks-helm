@@ -1,0 +1,35 @@
+title: BioAnalyze - MODULE 
+author: BioAnalyze
+only_build_toc_files: true
+exclude_patterns:
+  - "**/.aws"
+  - ".aws"
+  - "**/.ssh"
+  - ".ssh"
+  - ".github"
+  - ".github/**"
+  # build-harness
+  - "build-harness"
+  - "build-harness/**"
+  # tests
+  - "test/.test-harness/docs/targets"
+  - "test/.test-harness/**"
+  # terraform
+  - '.terraform/**'
+  - "**/.terraform"
+  - "**/.terraform.tfstate"
+  - "**/.terraform.tfstate**"
+  - "**/.terraform.tfstate.backup"
+  # python things
+  - ".ipynb_checkpoints"
+  - "**/.ipynb_checkpoints"
+  - "__pycache__"
+  - "**/__pycache__"
+  - "**/__pycache__/**"
+  - "**/.pytest_cache"
+  - "**/.pytest_cache/**"
+sphinx:
+  config:
+    html_baseurl: 'https://path_to_book/'
+  extra_extensions:
+    - sphinx_sitemap

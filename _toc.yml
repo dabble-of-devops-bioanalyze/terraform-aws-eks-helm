@@ -1,0 +1,10 @@
+# Add other files as necessary
+root: README
+title: MY_MODULE 
+entries:
+  - title: Examples
+    file: examples/examples
+    #entries:
+    #- title: AWS Batch Fargate - Example Module
+    #  # For zendesk make sure to leave off the .md/.rst
+    #  file: _templates/examples/fargate/{{cookiecutter.project_name}}/readme

@@ -1,0 +1,25 @@
+{
+    "namespace" : "",
+    "tenant" : "",
+    "name" : "",
+    "environment" : "",
+    "stage"       : "",
+    "name"        : "",
+    "delimiter": "-",
+    "project_name": "" ,
+    "terraform_variables": {},
+    "terraform_hcl": "",
+    "terraform_state": {},
+    "docs_data": {
+        "github_repo": "",
+        "directory": "",
+        "title": ""
+    },
+    "_copy_without_render": [
+        "**/.pytest_cache",
+        ".pytest_cache",
+        "__pycache__",
+        "tests/__pycache__",
+        "**/__pycache__"
+    ]
+}
