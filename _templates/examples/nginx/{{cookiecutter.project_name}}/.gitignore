@@ -6,9 +6,11 @@
 *.tfstate.*
 .terraform
 .terraform.tfstate.lock.info
+.terraform.lock.hcl
+**/.terraform.lock.hcl
 
-**/.vscode
 **/.idea
+**/.vscode
 **/*.iml
 
 # Cloud Posse Build Harness https://github.com/cloudposse/build-harness
@@ -19,8 +21,13 @@
 crash.log
 test.log
 
+# Dev Credentials
 .aws
+**/.aws
 .ssh
-.kube
+**/.ssh
 
-_templates/test/tests/__pycache__/
+# Python things 
+.pytest_cache
+**/.pytest_cache
+_build

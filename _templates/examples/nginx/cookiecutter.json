@@ -1,0 +1,76 @@
+{
+    "namespace": "",
+    "tenant": "",
+    "name": "",
+    "environment": "",
+    "stage": "",
+    "delimiter": "-",
+    "project_name": "",
+    "terraform_variables": {
+        "additional_tag_map": {},
+        "attributes": [],
+        "aws_availability_zones_exclude": [],
+        "aws_route53_record_name": "www",
+        "aws_route53_zone_name": "test.com.",
+        "delimiter": null,
+        "descriptor_formats": {},
+        "eks_node_groups": [
+            {
+                "desired_size": 1,
+                "disk_size": 50,
+                "instance_types": [
+                    "t3a.medium",
+                    "t3a.large",
+                    "t3a.2xlarge",
+                    "m4.10xlarge"
+                ],
+                "max_size": 450,
+                "min_size": 0,
+                "name": "node-group-1"
+            }
+        ],
+        "enable_ssl": true,
+        "enabled": null,
+        "environment": null,
+        "helm_release_chart": "airflow",
+        "helm_release_create_namespace": true,
+        "helm_release_merged_values_file": "",
+        "helm_release_name": "helm",
+        "helm_release_namespace": "default",
+        "helm_release_repository": "https://charts.bitnami.com/bitnami",
+        "helm_release_values_dir": "helm_charts",
+        "helm_release_values_files": [],
+        "helm_release_version": "11.0.8",
+        "helm_release_wait": true,
+        "id_length_limit": null,
+        "label_key_case": null,
+        "label_order": null,
+        "label_value_case": null,
+        "labels_as_tags": [
+            "default"
+        ],
+        "letsencrypt_email": "hello@gmail.com",
+        "name": null,
+        "namespace": null,
+        "regex_replace_chars": null,
+        "region": "us-east-1",
+        "run_tests": true,
+        "stage": null,
+        "tags": {},
+        "tenant": null
+    },
+    "terraform_hcl": "additional_tag_map             = {}\nattributes                     = []\naws_availability_zones_exclude = []\naws_route53_record_name        = \"www\"\naws_route53_zone_name          = \"test.com.\"\ncontext = {\n  \"additional_tag_map\": {},\n  \"attributes\": [],\n  \"delimiter\": null,\n  \"descriptor_formats\": {},\n  \"enabled\": true,\n  \"environment\": null,\n  \"id_length_limit\": null,\n  \"label_key_case\": null,\n  \"label_order\": [],\n  \"label_value_case\": null,\n  \"labels_as_tags\": [\n    \"unset\"\n  ],\n  \"name\": null,\n  \"namespace\": null,\n  \"regex_replace_chars\": null,\n  \"stage\": null,\n  \"tags\": {},\n  \"tenant\": null\n}\ndelimiter          = \"\"\ndescriptor_formats = {}\neks_node_groups = [\n  {\n    \"desired_size\": 1,\n    \"disk_size\": 50,\n    \"instance_types\": [\n      \"t3a.medium\",\n      \"t3a.large\",\n      \"t3a.2xlarge\",\n      \"m4.10xlarge\"\n    ],\n    \"max_size\": 450,\n    \"min_size\": 0,\n    \"name\": \"node-group-1\"\n  }\n]\nenable_ssl                      = true\nenabled                         = \"\"\nenvironment                     = \"\"\nhelm_release_chart              = \"airflow\"\nhelm_release_create_namespace   = true\nhelm_release_merged_values_file = \"\"\nhelm_release_name               = \"helm\"\nhelm_release_namespace          = \"default\"\nhelm_release_repository         = \"https://charts.bitnami.com/bitnami\"\nhelm_release_values_dir         = \"helm_charts\"\nhelm_release_values_files       = []\nhelm_release_version            = \"11.0.8\"\nhelm_release_wait               = true\nid_length_limit                 = \"\"\nlabel_key_case                  = \"\"\nlabel_order                     = \"\"\nlabel_value_case                = \"\"\nlabels_as_tags = [\n  \"default\"\n]\nletsencrypt_email   = \"hello@gmail.com\"\nname                = \"\"\nnamespace           = \"\"\nregex_replace_chars = \"\"\nregion              = \"us-east-1\"\nrun_tests           = true\nstage               = \"\"\ntags                = {}\ntenant              = \"\"\n",
+    "terraform_state": {},
+    "docs_data": {
+        "title": "AWS Batch - Nginx",
+        "github_repo": "git@github.com:dabble-of-devops-bioanalyze/terraform-aws-eks-helm.git",
+        "directory": "_templates/examples/nginx"
+    },
+    "_copy_without_render": [
+        "**/.pytest_cache",
+        ".pytest_cache",
+        "__pycache__",
+        "tests/__pycache__",
+        "**/__pycache__"
+    ]
+}

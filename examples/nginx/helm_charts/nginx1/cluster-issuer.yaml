@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: nginx1-letsencrypt
+  labels:
+    name: nginx1-letsencrypt
+spec:
+  acme:
+    email: jillian@dabbleofdevops.com
+    privateKeySecretRef:
+      name: nginx1-letsencrypt
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - http01:
+        ingress:
+          class: "nginx"

@@ -6,7 +6,7 @@
 #
 
 # Name of this project
-name: Terraform Github Project Template
+name: Terraform AWS EKS Helm Chart + Route53 Bootstrap Module
 
 # Logo for this project
 #logo: docs/logo.png
@@ -21,7 +21,7 @@ copyrights:
     year: "2020"
 
 # Canonical GitHub repo
-github_repo: dabble-of-devops-bioanalyze/terraform-example-module
+github_repo: dabble-of-devops-bioanalyze/terraform-aws-eks-helm
 
 # Badges to display
 badges:
@@ -78,9 +78,11 @@ related:
 
 # Short description of this project
 description: |
- This is a GitHub project template. To get started using this structure click the 'Use this Template' button on the main github repo page.
+ This module is meant to bootstrap a lot of the operations and reduce boilerplate code for a lot of modules I deploy.
 
- Update the README.yaml to reflect this project.
+ 1. Deploy a Helm chart on AWS EKS
+ 2. (Optionally) create a new or use an existing ingress to serve these.
+ 3. (Optionally) create the correct DNS entries in AWS Route 53
 
  This project wouldn't be possible without open source software. The conventions used in the terraform recipes come from the [CloudPosse](https://github.com/cloudposse/terraform-example-module) group.
 
@@ -106,36 +108,20 @@ references:
 
 # How to use this module. Should be an easy example to copy and paste.
 usage: |-
-  For a complete example, see [examples/complete](examples/complete).
+  For a complete example, see [examples/nginx](examples/nginx).
 
-  For automated tests of the complete example using [bats](https://github.com/bats-core/bats-core) and [Terratest](https://github.com/gruntwork-io/terratest)
-  (which tests and deploys the example on AWS), see [test](test).
-
-  ```hcl
-  module "eks" {
-    source = "dabble-of-devops-bioanalyze/eks-jupyterhub/aws"
-
-    region = var.region
-    vpc_id = var.vpc_id
-    subnet_ids = var.subnet_ids
-
-    oidc_provider_enabled = true
-    cluster_encryption_config_enabled = true
-
-    context = module.this.context
-  }
-  ```
 
 # Example usage
 examples: |-
   Here is an example of using this module:
-  - [`examples/complete`](https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-jupyterhub/) - complete example of using this module
+  - [`examples/nginx`](https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-helm/) - complete example of using this module
 
 # How to get started quickly
 #quickstart: |-
 #  Here's how to get started...
 
 # Other files to include in this README from the project folder
+# TODO need to move the location of these from docs/ to just .
 include:
   - "docs/targets.md"
   - "docs/terraform.md"

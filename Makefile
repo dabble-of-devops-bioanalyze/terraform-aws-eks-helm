@@ -14,11 +14,10 @@ download-readme:
 
 docker-run:
 	$(MAKE) download-readme
-	docker run -it -v "$(shell pwd):/tmp/terraform-module" \
+	docker run -it --rm -v "$(shell pwd):/tmp/terraform-module" \
 		-e README_TEMPLATE_FILE=/tmp/terraform-module/README.md.gotmpl \
 		-w /tmp/terraform-module \
-		--entrypoint bash  \
-		cloudposse/build-harness:slim-latest bash
+		dabbleofdevops/terraform:latest bash
 
 custom-init:
 	docker run -it -v "$(shell pwd):/tmp/terraform-module" \
@@ -33,3 +32,6 @@ custom-readme:
 		-e README_TEMPLATE_FILE=/tmp/terraform-module/README.md.gotmpl \
 		-w /tmp/terraform-module \
 		cloudposse/build-harness:slim-latest readme
+
+github/release/init:
+	gh release create v1.0.0 --notes "initial release"

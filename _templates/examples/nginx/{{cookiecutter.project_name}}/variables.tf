@@ -13,9 +13,37 @@ variable "region" {
   description = "AWS Region"
 }
 
+variable "aws_availability_zones_exclude" {
+  description = "availability zones to exclude"
+  type        = list(any)
+  default     = []
+}
+
 ##################################################
 # AWS EKS
 ##################################################
+
+variable "eks_node_groups" {
+  type = list(object({
+    instance_types = list(string)
+    desired_size   = number
+    min_size       = number
+    max_size       = number
+    disk_size      = number
+    name           = string
+  }))
+  description = "EKS Node Groups"
+  default = [
+    {
+      name           = "node-group-1"
+      instance_types = ["t3a.medium", "t3a.large", "t3a.2xlarge", "m4.10xlarge"]
+      desired_size   = 1
+      min_size       = 0
+      max_size       = 450
+      disk_size      = 50
+    }
+  ]
+}
 
 ##################################################
 # Helm Release Variables
@@ -85,22 +113,10 @@ variable "helm_release_values_files" {
   default     = []
 }
 
-variable "helm_release_sets" {
-  type        = list(object({ name = string, value = string, type = string }))
-  description = "Variable sets"
-  default     = []
-}
-
 variable "helm_release_merged_values_file" {
   type        = string
-  description = "Path to merged helm files. If blank one will be calculated for you."
+  description = "Path to merged helm files. This path must exist before the module is invoked."
   default     = ""
-}
-
-variable "helm_release_values_service_type" {
-  type        = string
-  description = "Service type. Must be one of LoadBalancer or ClusterIP. If using enable_ssl=true the service type should be ClusterIP"
-  default     = "ClusterIP"
 }
 
 ##################################################
@@ -134,44 +150,8 @@ variable "aws_route53_record_name" {
   default     = "www"
 }
 
-variable "ingress_template" {
-  type        = string
-  description = "Path to ingress template. Ingress compatible with bitnami is given."
-  default     = ""
-}
-
-variable "install_ingress" {
+variable "run_tests" {
   type        = bool
-  description = "Install the ingress helm chart. No will only fill out the cluster issuer, yes fills out the cluster issuer and installs. "
+  description = "Run pytests after install"
   default     = true
-}
-
-variable "use_existing_ingress" {
-  type        = bool
-  description = "Use existing ingress"
-  default     = false
-}
-
-variable "render_ingress" {
-  type        = bool
-  default     = true
-  description = "Render ingress.yaml file - only useful if installing an additional service such as nginx"
-}
-
-variable "render_cluster_issuer" {
-  type        = bool
-  description = "Create a cluster-issuer.yaml file"
-  default     = true
-}
-
-variable "existing_ingress_name" {
-  type        = string
-  description = "Existing ingress release name"
-  default     = "nginx-ingress-ingress-nginx-ingress-controller"
-}
-
-variable "existing_ingress_namespace" {
-  type        = string
-  description = "Existing ingress release namespace"
-  default     = "default"
 }

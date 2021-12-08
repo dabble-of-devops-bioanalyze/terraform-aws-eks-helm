@@ -374,14 +374,17 @@ def main(pathsource: Path, examplesdir: Path, outputdir: Path, port: int):
                 },
             }
 
-            cookiecutter(
-                COOKIECUTTER_TEMPLATE_REPO,
-                directory=COOKIECUTTER_TEMPLATE_DIR,
-                overwrite_if_exists=True,
-                extra_context=extra_context,
-                output_dir=example["temp_dir"],
-                no_input=True,
-            )
+            try:
+                cookiecutter(
+                    COOKIECUTTER_TEMPLATE_REPO,
+                    directory=COOKIECUTTER_TEMPLATE_DIR,
+                    overwrite_if_exists=True,
+                    extra_context=extra_context,
+                    output_dir=example["temp_dir"],
+                    no_input=True,
+                )
+            except Exception as e:
+                logger.exception('Unable to create cookiecutter')
 
             if os.path.exists(example["destination_dir"]):
                 shutil.rmtree(example["destination_dir"])
