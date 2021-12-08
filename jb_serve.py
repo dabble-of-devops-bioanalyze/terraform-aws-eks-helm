@@ -413,7 +413,7 @@ def main(pathsource: Path, examplesdir: Path, outputdir: Path, port: int):
 
     def build():
         subprocess.run(["jb", "clean", outputdir])
-        subprocess.run(["jb", "build", pathsource, "--path-output", outputdir])
+        subprocess.run(["jb", "build", pathsource])
 
     # Build if not exists upon startup
     if not os.path.exists(outputdir):
