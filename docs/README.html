@@ -447,8 +447,8 @@ The table below correctly indicates which inputs are required.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a name="module_helm_ingress"></a> <a class="reference external" href="#module_helm_ingress">helm_ingress</a></p></td>
-<td><p>/root/terraform-recipes/terraform-aws-eks-bitnami-nginx-ingress</p></td>
-<td><p>n/a</p></td>
+<td><p>dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws</p></td>
+<td><p>&gt;= 0.2.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a name="module_merge_values"></a> <a class="reference external" href="#module_merge_values">merge_values</a></p></td>
 <td><p>dabble-of-devops-biodeploy/merge-values/helm</p></td>
@@ -470,35 +470,35 @@ The table below correctly indicates which inputs are required.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record">aws_route53_record.helm</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record">aws_route53_record.cluster_ip</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release">helm_release.helm</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record">aws_route53_record.load_balancer</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file">local_file.cluster_issuer</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release">helm_release.helm</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file">local_file.rendered_ingress</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file">local_file.cluster_issuer</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.create_merged_file</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file">local_file.rendered_ingress</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.helm_dirs</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.create_merged_file</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.kubectl_apply_cluster_issuer</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.helm_dirs</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.sleep_helm_update</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.kubectl_apply_cluster_issuer</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string">random_string.computed_values</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.sleep_helm_update</a></p></td>
 <td><p>resource</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb">aws_elb.helm</a></p></td>
-<td><p>data source</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string">random_string.computed_values</a></p></td>
+<td><p>resource</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb">aws_elb.helm_ingress</a></p></td>
 <td><p>data source</p></td>
@@ -506,10 +506,10 @@ The table below correctly indicates which inputs are required.</p>
 <tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb">aws_elb.helm_ingress_existing</a></p></td>
 <td><p>data source</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone">aws_route53_zone.helm</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb">aws_elb.load_balancer</a></p></td>
 <td><p>data source</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service">kubernetes_service.helm</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone">aws_route53_zone.helm</a></p></td>
 <td><p>data source</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service">kubernetes_service.helm_ingress</a></p></td>
@@ -518,10 +518,13 @@ The table below correctly indicates which inputs are required.</p>
 <tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service">kubernetes_service.helm_ingress_existing</a></p></td>
 <td><p>data source</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file">template_file.cluster_issuer</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service">kubernetes_service.load_balancer</a></p></td>
 <td><p>data source</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file">template_file.ingress</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file">template_file.cluster_issuer</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file">template_file.ingress</a></p></td>
 <td><p>data source</p></td>
 </tr>
 </tbody>
@@ -803,25 +806,31 @@ The table below correctly indicates which inputs are required.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a name="output_aws_elb"></a> <a class="reference external" href="#output_aws_elb">aws_elb</a></p></td>
+<tr class="row-even"><td><p><a name="output_aws_elb_ingress"></a> <a class="reference external" href="#output_aws_elb_ingress">aws_elb_ingress</a></p></td>
 <td><p>n/a</p></td>
 </tr>
-<tr class="row-odd"><td><p><a name="output_aws_elb_helm"></a> <a class="reference external" href="#output_aws_elb_helm">aws_elb_helm</a></p></td>
+<tr class="row-odd"><td><p><a name="output_aws_elb_load_balancer"></a> <a class="reference external" href="#output_aws_elb_load_balancer">aws_elb_load_balancer</a></p></td>
 <td><p>n/a</p></td>
 </tr>
-<tr class="row-even"><td><p><a name="output_aws_route53_record_helm"></a> <a class="reference external" href="#output_aws_route53_record_helm">aws_route53_record_helm</a></p></td>
+<tr class="row-even"><td><p><a name="output_aws_route53_record_cluster_ip"></a> <a class="reference external" href="#output_aws_route53_record_cluster_ip">aws_route53_record_cluster_ip</a></p></td>
 <td><p>n/a</p></td>
 </tr>
-<tr class="row-odd"><td><p><a name="output_id"></a> <a class="reference external" href="#output_id">id</a></p></td>
+<tr class="row-odd"><td><p><a name="output_aws_route53_record_load_balancer"></a> <a class="reference external" href="#output_aws_route53_record_load_balancer">aws_route53_record_load_balancer</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="output_id"></a> <a class="reference external" href="#output_id">id</a></p></td>
 <td><p>ID of the created example</p></td>
 </tr>
-<tr class="row-even"><td><p><a name="output_ingress_template"></a> <a class="reference external" href="#output_ingress_template">ingress_template</a></p></td>
+<tr class="row-odd"><td><p><a name="output_ingress_template"></a> <a class="reference external" href="#output_ingress_template">ingress_template</a></p></td>
 <td><p>n/a</p></td>
 </tr>
-<tr class="row-odd"><td><p><a name="output_kubernetes_service"></a> <a class="reference external" href="#output_kubernetes_service">kubernetes_service</a></p></td>
+<tr class="row-even"><td><p><a name="output_kubernetes_service"></a> <a class="reference external" href="#output_kubernetes_service">kubernetes_service</a></p></td>
 <td><p>n/a</p></td>
 </tr>
-<tr class="row-even"><td><p><a name="output_kubernetes_service_helm"></a> <a class="reference external" href="#output_kubernetes_service_helm">kubernetes_service_helm</a></p></td>
+<tr class="row-odd"><td><p><a name="output_kubernetes_service_helm"></a> <a class="reference external" href="#output_kubernetes_service_helm">kubernetes_service_helm</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="output_ssl_type"></a> <a class="reference external" href="#output_ssl_type">ssl_type</a></p></td>
 <td><p>n/a</p></td>
 </tr>
 </tbody>

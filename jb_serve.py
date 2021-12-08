@@ -374,17 +374,14 @@ def main(pathsource: Path, examplesdir: Path, outputdir: Path, port: int):
                 },
             }
 
-            try:
-                cookiecutter(
-                    COOKIECUTTER_TEMPLATE_REPO,
-                    directory=COOKIECUTTER_TEMPLATE_DIR,
-                    overwrite_if_exists=True,
-                    extra_context=extra_context,
-                    output_dir=example["temp_dir"],
-                    no_input=True,
-                )
-            except Exception as e:
-                logger.exception('Unable to create cookiecutter')
+            cookiecutter(
+                COOKIECUTTER_TEMPLATE_REPO,
+                directory=COOKIECUTTER_TEMPLATE_DIR,
+                overwrite_if_exists=True,
+                extra_context=extra_context,
+                output_dir=example["temp_dir"],
+                no_input=True,
+            )
 
             if os.path.exists(example["destination_dir"]):
                 shutil.rmtree(example["destination_dir"])
@@ -415,8 +412,8 @@ def main(pathsource: Path, examplesdir: Path, outputdir: Path, port: int):
         gencookiecutters()
 
     def build():
-        subprocess.run(["jb", "clean", pathsource])
-        subprocess.run(["jb", "build", pathsource])
+        subprocess.run(["jb", "clean", outputdir])
+        subprocess.run(["jb", "build", pathsource, "--path-output", outputdir])
 
     # Build if not exists upon startup
     if not os.path.exists(outputdir):

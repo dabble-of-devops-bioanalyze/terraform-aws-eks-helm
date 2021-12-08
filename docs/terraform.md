@@ -27,7 +27,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_helm_ingress"></a> [helm\_ingress](#module\_helm\_ingress) | /root/terraform-recipes/terraform-aws-eks-bitnami-nginx-ingress | n/a |
+| <a name="module_helm_ingress"></a> [helm\_ingress](#module\_helm\_ingress) | dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws | >= 0.2.0 |
 | <a name="module_merge_values"></a> [merge\_values](#module\_merge\_values) | dabble-of-devops-biodeploy/merge-values/helm | >= 0.2.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
@@ -35,7 +35,8 @@
 
 | Name | Type |
 |------|------|
-| [aws_route53_record.helm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
+| [aws_route53_record.cluster_ip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
+| [aws_route53_record.load_balancer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [helm_release.helm](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [local_file.cluster_issuer](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [local_file.rendered_ingress](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
@@ -44,13 +45,13 @@
 | [null_resource.kubectl_apply_cluster_issuer](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.sleep_helm_update](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [random_string.computed_values](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
-| [aws_elb.helm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb) | data source |
 | [aws_elb.helm_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb) | data source |
 | [aws_elb.helm_ingress_existing](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb) | data source |
+| [aws_elb.load_balancer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb) | data source |
 | [aws_route53_zone.helm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone) | data source |
-| [kubernetes_service.helm](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service) | data source |
 | [kubernetes_service.helm_ingress](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service) | data source |
 | [kubernetes_service.helm_ingress_existing](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service) | data source |
+| [kubernetes_service.load_balancer](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service) | data source |
 | [template_file.cluster_issuer](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 | [template_file.ingress](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 
@@ -105,11 +106,13 @@
 
 | Name | Description |
 |------|-------------|
-| <a name="output_aws_elb"></a> [aws\_elb](#output\_aws\_elb) | n/a |
-| <a name="output_aws_elb_helm"></a> [aws\_elb\_helm](#output\_aws\_elb\_helm) | n/a |
-| <a name="output_aws_route53_record_helm"></a> [aws\_route53\_record\_helm](#output\_aws\_route53\_record\_helm) | n/a |
+| <a name="output_aws_elb_ingress"></a> [aws\_elb\_ingress](#output\_aws\_elb\_ingress) | n/a |
+| <a name="output_aws_elb_load_balancer"></a> [aws\_elb\_load\_balancer](#output\_aws\_elb\_load\_balancer) | n/a |
+| <a name="output_aws_route53_record_cluster_ip"></a> [aws\_route53\_record\_cluster\_ip](#output\_aws\_route53\_record\_cluster\_ip) | n/a |
+| <a name="output_aws_route53_record_load_balancer"></a> [aws\_route53\_record\_load\_balancer](#output\_aws\_route53\_record\_load\_balancer) | n/a |
 | <a name="output_id"></a> [id](#output\_id) | ID of the created example |
 | <a name="output_ingress_template"></a> [ingress\_template](#output\_ingress\_template) | n/a |
 | <a name="output_kubernetes_service"></a> [kubernetes\_service](#output\_kubernetes\_service) | n/a |
 | <a name="output_kubernetes_service_helm"></a> [kubernetes\_service\_helm](#output\_kubernetes\_service\_helm) | n/a |
+| <a name="output_ssl_type"></a> [ssl\_type](#output\_ssl\_type) | n/a |
 <!-- markdownlint-restore -->
