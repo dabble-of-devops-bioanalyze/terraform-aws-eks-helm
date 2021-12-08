@@ -1,0 +1,1018 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terraform AWS EKS Helm Chart + Route53 Bootstrap Module &#8212; BioAnalyze - MODULE</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://path_to_book/README.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples/examples.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">BioAnalyze - MODULE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1 current">
+  <a class="reference internal" href="#">
+   Terraform AWS EKS Helm Chart + Route53 Bootstrap Module
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="examples/examples.html">
+   Examples
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/README.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-science-infrastructure-on-aws">
+   Data Science Infrastructure on AWS
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#examples">
+   Examples
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#makefile-targets">
+   Makefile Targets
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#requirements">
+   Requirements
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#providers">
+   Providers
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#modules">
+   Modules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#resources">
+   Resources
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inputs">
+   Inputs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#outputs">
+   Outputs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#share-the-love">
+   Share the Love
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#related-projects">
+   Related Projects
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#help">
+   Help
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bioinformatics-infrastructure-on-aws-for-startups">
+   Bioinformatics Infrastructure on AWS for Startups
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#contributing">
+   Contributing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bug-reports-feature-requests">
+     Bug Reports &amp; Feature Requests
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#developing">
+     Developing
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#developer-notes">
+       Developer Notes
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#copyrights">
+   Copyrights
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#license">
+   License
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#trademarks">
+   Trademarks
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#contributors">
+     Contributors
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sponsor">
+   Sponsor
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <!-- markdownlint-disable -->
+<div class="tex2jax_ignore mathjax_ignore section" id="terraform-aws-eks-helm-chart-route53-bootstrap-module">
+<h1>Terraform AWS EKS Helm Chart + Route53 Bootstrap Module<a class="headerlink" href="#terraform-aws-eks-helm-chart-route53-bootstrap-module" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/dabble-of-devops-bioanalyze/terraform-example-module/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/release/dabble-of-devops-bioanalyze/terraform-example-module.svg" /></a> <a class="reference external" href="https://discourse.bioanalyze.io"><img alt="Discourse Forum" src="https://img.shields.io/discourse/https/discourse.bioanalyze.io/posts.svg" /></a></p>
+<!-- markdownlint-restore -->
+<p><img alt="BioAnalyze Logo" src="https://raw.githubusercontent.com/Dabble-of-DevOps-BioAnalyze/biohub-info/master/logos/BioAnalyze_v2-01.jpg" /></p>
+<!--
+
+
+
+
+  ** DO NOT EDIT THIS FILE
+  **
+  ** This file was automatically generated by the `build-harness`.
+  ** 1) Make all changes to `README.yaml`
+  ** 2) Run `make init` (you only need to do this once)
+  ** 3) Run`make readme` to rebuild this file.
+  **
+  ** (We maintain HUNDREDS of open source projects. This is how we maintain our sanity.)
+  **
+
+
+
+
+
+-->
+<p>This module is meant to bootstrap a lot of the operations and reduce boilerplate code for a lot of modules I deploy.</p>
+<ol class="simple">
+<li><p>Deploy a Helm chart on AWS EKS</p></li>
+<li><p>(Optionally) create a new or use an existing ingress to serve these.</p></li>
+<li><p>(Optionally) create the correct DNS entries in AWS Route 53</p></li>
+</ol>
+<p>This project wouldn’t be possible without open source software. The conventions used in the terraform recipes come from the <a class="reference external" href="https://github.com/cloudposse/terraform-example-module">CloudPosse</a> group.</p>
+<hr class="docutils" />
+<p>This project is part of the <a class="reference external" href="https://www.dabbleofdevops.com/biohub">“BioAnalyze”</a> project, which aims to make High Performance Compute Architecture accessible to everyone.</p>
+<p>It’s 100% Open Source and licensed under the <span class="xref myst">APACHE2</span>.</p>
+<div class="section" id="data-science-infrastructure-on-aws">
+<h2>Data Science Infrastructure on AWS<a class="headerlink" href="#data-science-infrastructure-on-aws" title="Permalink to this headline">¶</a></h2>
+<p><img alt="BioAnalyze Logo" src="https://raw.githubusercontent.com/dabble-of-devops-bioanalyze/biohub-info/master/images/BioAnalyze-Ecosystem-Data-Visualization.jpeg" /></p>
+<p><strong>IMPORTANT:</strong> We do not pin modules to versions in our examples because of the
+difficulty of keeping the versions in the documentation in sync with the latest released versions.
+We highly recommend that in your code you pin the version to the exact version you are
+using so that your infrastructure remains stable, and update versions in a
+systematic way so that they do not catch you by surprise.</p>
+<p>Also, because of a bug in the Terraform registry (<a class="reference external" href="https://github.com/hashicorp/terraform/issues/21417">hashicorp/terraform#21417</a>),
+the registry shows many of our inputs as required when in fact they are optional.
+The table below correctly indicates which inputs are required.</p>
+<p>For a complete example, see <span class="xref myst">examples/nginx</span>.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example of using this module:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-helm/"><code class="docutils literal notranslate"><span class="pre">examples/nginx</span></code></a> - complete example of using this module</p></li>
+</ul>
+<!-- markdownlint-disable -->
+</div>
+<div class="section" id="makefile-targets">
+<h2>Makefile Targets<a class="headerlink" href="#makefile-targets" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Available targets:
+
+  help                                Help screen
+  help/all                            Display help for all targets
+  help/short                          This help short screen
+  lint                                Lint terraform code
+</pre></div>
+</div>
+<!-- markdownlint-restore -->
+<!-- markdownlint-disable -->
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a name="requirement_terraform"></a> <a class="reference external" href="#requirement_terraform">terraform</a></p></td>
+<td><p>&gt;= 0.13</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="requirement_aws"></a> <a class="reference external" href="#requirement_aws">aws</a></p></td>
+<td><p>&gt;= 3.30.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="requirement_helm"></a> <a class="reference external" href="#requirement_helm">helm</a></p></td>
+<td><p>&gt;= 2.1.2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="requirement_http"></a> <a class="reference external" href="#requirement_http">http</a></p></td>
+<td><p>&gt;= 2.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="requirement_kubernetes"></a> <a class="reference external" href="#requirement_kubernetes">kubernetes</a></p></td>
+<td><p>&gt;= 2.5.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="requirement_local"></a> <a class="reference external" href="#requirement_local">local</a></p></td>
+<td><p>&gt;= 1.2</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="requirement_random"></a> <a class="reference external" href="#requirement_random">random</a></p></td>
+<td><p>&gt;= 2.2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="providers">
+<h2>Providers<a class="headerlink" href="#providers" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a name="provider_aws"></a> <a class="reference external" href="#provider_aws">aws</a></p></td>
+<td><p>3.68.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="provider_helm"></a> <a class="reference external" href="#provider_helm">helm</a></p></td>
+<td><p>2.4.1</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="provider_kubernetes"></a> <a class="reference external" href="#provider_kubernetes">kubernetes</a></p></td>
+<td><p>2.7.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="provider_local"></a> <a class="reference external" href="#provider_local">local</a></p></td>
+<td><p>2.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="provider_null"></a> <a class="reference external" href="#provider_null">null</a></p></td>
+<td><p>3.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="provider_random"></a> <a class="reference external" href="#provider_random">random</a></p></td>
+<td><p>3.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="provider_template"></a> <a class="reference external" href="#provider_template">template</a></p></td>
+<td><p>2.2.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Source</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a name="module_helm_ingress"></a> <a class="reference external" href="#module_helm_ingress">helm_ingress</a></p></td>
+<td><p>/root/terraform-recipes/terraform-aws-eks-bitnami-nginx-ingress</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="module_merge_values"></a> <a class="reference external" href="#module_merge_values">merge_values</a></p></td>
+<td><p>dabble-of-devops-biodeploy/merge-values/helm</p></td>
+<td><p>&gt;= 0.2.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="module_this"></a> <a class="reference external" href="#module_this">this</a></p></td>
+<td><p>cloudposse/label/null</p></td>
+<td><p>0.25.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record">aws_route53_record.helm</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release">helm_release.helm</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file">local_file.cluster_issuer</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file">local_file.rendered_ingress</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.create_merged_file</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.helm_dirs</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.kubectl_apply_cluster_issuer</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">null_resource.sleep_helm_update</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string">random_string.computed_values</a></p></td>
+<td><p>resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb">aws_elb.helm</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb">aws_elb.helm_ingress</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb">aws_elb.helm_ingress_existing</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone">aws_route53_zone.helm</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service">kubernetes_service.helm</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service">kubernetes_service.helm_ingress</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service">kubernetes_service.helm_ingress_existing</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file">template_file.cluster_issuer</a></p></td>
+<td><p>data source</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file">template_file.ingress</a></p></td>
+<td><p>data source</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="text-align:center head"><p>Required</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a name="input_additional_tag_map"></a> <a class="reference external" href="#input_additional_tag_map">additional_tag_map</a></p></td>
+<td><p>Additional key-value pairs to add to each map in <code class="docutils literal notranslate"><span class="pre">tags_as_list_of_maps</span></code>. Not added to <code class="docutils literal notranslate"><span class="pre">tags</span></code> or <code class="docutils literal notranslate"><span class="pre">id</span></code>.<br>This is for some rare cases where resources want additional configuration of tags<br>and therefore take a list of maps with tag key, value, and additional configuration.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">map(string)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_attributes"></a> <a class="reference external" href="#input_attributes">attributes</a></p></td>
+<td><p>ID element. Additional attributes (e.g. <code class="docutils literal notranslate"><span class="pre">workers</span></code> or <code class="docutils literal notranslate"><span class="pre">cluster</span></code>) to add to <code class="docutils literal notranslate"><span class="pre">id</span></code>,<br>in the order they appear in the list. New attributes are appended to the<br>end of the list. The elements of the list are joined by the <code class="docutils literal notranslate"><span class="pre">delimiter</span></code><br>and treated as a single ID element.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list(string)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[]</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_aws_route53_record_name"></a> <a class="reference external" href="#input_aws_route53_record_name">aws_route53_record_name</a></p></td>
+<td><p>Record name to add to aws_route_53. Must be a valid subdomain - www,app,etc</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;www&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_aws_route53_zone_name"></a> <a class="reference external" href="#input_aws_route53_zone_name">aws_route53_zone_name</a></p></td>
+<td><p>Name of the zone to add records. Do not forget the trailing ‘.’ - ‘<a class="reference external" href="http://test.com">test.com</a>.’</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;test.com.&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_context"></a> <a class="reference external" href="#input_context">context</a></p></td>
+<td><p>Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as <code class="docutils literal notranslate"><span class="pre">null</span></code> to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional_tag_map, which are merged.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">any</span></code></p></td>
+<td><p><pre>{<br>  “additional_tag_map”: {},<br>  “attributes”: [],<br>  “delimiter”: null,<br>  “descriptor_formats”: {},<br>  “enabled”: true,<br>  “environment”: null,<br>  “id_length_limit”: null,<br>  “label_key_case”: null,<br>  “label_order”: [],<br>  “label_value_case”: null,<br>  “labels_as_tags”: [<br>    “unset”<br>  ],<br>  “name”: null,<br>  “namespace”: null,<br>  “regex_replace_chars”: null,<br>  “stage”: null,<br>  “tags”: {},<br>  “tenant”: null<br>}</pre></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_delimiter"></a> <a class="reference external" href="#input_delimiter">delimiter</a></p></td>
+<td><p>Delimiter to be used between ID elements.<br>Defaults to <code class="docutils literal notranslate"><span class="pre">-</span></code> (hyphen). Set to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> to use no delimiter at all.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_descriptor_formats"></a> <a class="reference external" href="#input_descriptor_formats">descriptor_formats</a></p></td>
+<td><p>Describe additional descriptors to be output in the <code class="docutils literal notranslate"><span class="pre">descriptors</span></code> output map.<br>Map of maps. Keys are names of descriptors. Values are maps of the form<br><code class="docutils literal notranslate"><span class="pre">{&lt;br&gt;</span>&#160;&#160; <span class="pre">format</span> <span class="pre">=</span> <span class="pre">string&lt;br&gt;</span>&#160;&#160; <span class="pre">labels</span> <span class="pre">=</span> <span class="pre">list(string)&lt;br&gt;}</span></code><br>(Type is <code class="docutils literal notranslate"><span class="pre">any</span></code> so the map values can later be enhanced to provide additional options.)<br><code class="docutils literal notranslate"><span class="pre">format</span></code> is a Terraform format string to be passed to the <code class="docutils literal notranslate"><span class="pre">format()</span></code> function.<br><code class="docutils literal notranslate"><span class="pre">labels</span></code> is a list of labels, in order, to pass to <code class="docutils literal notranslate"><span class="pre">format()</span></code> function.<br>Label values will be normalized before being passed to <code class="docutils literal notranslate"><span class="pre">format()</span></code> so they will be<br>identical to how they appear in <code class="docutils literal notranslate"><span class="pre">id</span></code>.<br>Default is <code class="docutils literal notranslate"><span class="pre">{}</span></code> (<code class="docutils literal notranslate"><span class="pre">descriptors</span></code> output will be empty).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">any</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_enable_ssl"></a> <a class="reference external" href="#input_enable_ssl">enable_ssl</a></p></td>
+<td><p>Enable SSL Support?</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_enabled"></a> <a class="reference external" href="#input_enabled">enabled</a></p></td>
+<td><p>Set to false to prevent the module from creating any resources</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_environment"></a> <a class="reference external" href="#input_environment">environment</a></p></td>
+<td><p>ID element. Usually used for region e.g. ‘uw2’, ‘us-west-2’, OR role ‘prod’, ‘staging’, ‘dev’, ‘UAT’</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_existing_ingress_name"></a> <a class="reference external" href="#input_existing_ingress_name">existing_ingress_name</a></p></td>
+<td><p>Existing ingress release name</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;nginx-ingress-ingress-nginx-ingress-controller&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_existing_ingress_namespace"></a> <a class="reference external" href="#input_existing_ingress_namespace">existing_ingress_namespace</a></p></td>
+<td><p>Existing ingress release namespace</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_helm_release_chart"></a> <a class="reference external" href="#input_helm_release_chart">helm_release_chart</a></p></td>
+<td><p>helm release chart</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;airflow&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_helm_release_create_namespace"></a> <a class="reference external" href="#input_helm_release_create_namespace">helm_release_create_namespace</a></p></td>
+<td><p>Create namespace if it does not exist</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_helm_release_merged_values_file"></a> <a class="reference external" href="#input_helm_release_merged_values_file">helm_release_merged_values_file</a></p></td>
+<td><p>Path to merged helm files. If blank one will be calculated for you.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_helm_release_name"></a> <a class="reference external" href="#input_helm_release_name">helm_release_name</a></p></td>
+<td><p>helm release name</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;helm&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_helm_release_namespace"></a> <a class="reference external" href="#input_helm_release_namespace">helm_release_namespace</a></p></td>
+<td><p>helm release namespace</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_helm_release_repository"></a> <a class="reference external" href="#input_helm_release_repository">helm_release_repository</a></p></td>
+<td><p>helm release chart repository</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;https://charts.bitnami.com/bitnami&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_helm_release_sets"></a> <a class="reference external" href="#input_helm_release_sets">helm_release_sets</a></p></td>
+<td><p>Variable sets</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list(object({</span> <span class="pre">name</span> <span class="pre">=</span> <span class="pre">string,</span> <span class="pre">value</span> <span class="pre">=</span> <span class="pre">string,</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">string</span> <span class="pre">}))</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[]</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_helm_release_values_dir"></a> <a class="reference external" href="#input_helm_release_values_dir">helm_release_values_dir</a></p></td>
+<td><p>Directory to put rendered values template files or additional keys. Should be helm_charts/{helm_release_name}</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;helm_charts&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_helm_release_values_files"></a> <a class="reference external" href="#input_helm_release_values_files">helm_release_values_files</a></p></td>
+<td><p>helm release values files - paths values files to add to helm install –values {}</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list(string)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[]</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_helm_release_values_service_type"></a> <a class="reference external" href="#input_helm_release_values_service_type">helm_release_values_service_type</a></p></td>
+<td><p>Service type. Must be one of LoadBalancer or ClusterIP. If using enable_ssl=true the service type should be ClusterIP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;ClusterIP&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_helm_release_version"></a> <a class="reference external" href="#input_helm_release_version">helm_release_version</a></p></td>
+<td><p>helm release version</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;11.0.8&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_helm_release_wait"></a> <a class="reference external" href="#input_helm_release_wait">helm_release_wait</a></p></td>
+<td><p>Tell terraform to wait until the service comes up.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_id_length_limit"></a> <a class="reference external" href="#input_id_length_limit">id_length_limit</a></p></td>
+<td><p>Limit <code class="docutils literal notranslate"><span class="pre">id</span></code> to this many characters (minimum 6).<br>Set to <code class="docutils literal notranslate"><span class="pre">0</span></code> for unlimited length.<br>Set to <code class="docutils literal notranslate"><span class="pre">null</span></code> for keep the existing setting, which defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.<br>Does not affect <code class="docutils literal notranslate"><span class="pre">id_full</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_ingress_template"></a> <a class="reference external" href="#input_ingress_template">ingress_template</a></p></td>
+<td><p>Path to ingress template. Ingress compatible with bitnami is given.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_install_ingress"></a> <a class="reference external" href="#input_install_ingress">install_ingress</a></p></td>
+<td><p>Install the ingress helm chart. No will only fill out the cluster issuer, yes fills out the cluster issuer and installs.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_label_key_case"></a> <a class="reference external" href="#input_label_key_case">label_key_case</a></p></td>
+<td><p>Controls the letter case of the <code class="docutils literal notranslate"><span class="pre">tags</span></code> keys (label names) for tags generated by this module.<br>Does not affect keys of tags passed in via the <code class="docutils literal notranslate"><span class="pre">tags</span></code> input.<br>Possible values: <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>.<br>Default value: <code class="docutils literal notranslate"><span class="pre">title</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_label_order"></a> <a class="reference external" href="#input_label_order">label_order</a></p></td>
+<td><p>The order in which the labels (ID elements) appear in the <code class="docutils literal notranslate"><span class="pre">id</span></code>.<br>Defaults to [“namespace”, “environment”, “stage”, “name”, “attributes”].<br>You can omit any of the 6 labels (“tenant” is the 6th), but at least one must be present.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list(string)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_label_value_case"></a> <a class="reference external" href="#input_label_value_case">label_value_case</a></p></td>
+<td><p>Controls the letter case of ID elements (labels) as included in <code class="docutils literal notranslate"><span class="pre">id</span></code>,<br>set as tag values, and output by this module individually.<br>Does not affect values of tags passed in via the <code class="docutils literal notranslate"><span class="pre">tags</span></code> input.<br>Possible values: <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> and <code class="docutils literal notranslate"><span class="pre">none</span></code> (no transformation).<br>Set this to <code class="docutils literal notranslate"><span class="pre">title</span></code> and set <code class="docutils literal notranslate"><span class="pre">delimiter</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> to yield Pascal Case IDs.<br>Default value: <code class="docutils literal notranslate"><span class="pre">lower</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_labels_as_tags"></a> <a class="reference external" href="#input_labels_as_tags">labels_as_tags</a></p></td>
+<td><p>Set of labels (ID elements) to include as tags in the <code class="docutils literal notranslate"><span class="pre">tags</span></code> output.<br>Default is to include all labels.<br>Tags with empty values will not be included in the <code class="docutils literal notranslate"><span class="pre">tags</span></code> output.<br>Set to <code class="docutils literal notranslate"><span class="pre">[]</span></code> to suppress all generated tags.<br><strong>Notes:</strong><br>  The value of the <code class="docutils literal notranslate"><span class="pre">name</span></code> tag, if included, will be the <code class="docutils literal notranslate"><span class="pre">id</span></code>, not the <code class="docutils literal notranslate"><span class="pre">name</span></code>.<br>  Unlike other <code class="docutils literal notranslate"><span class="pre">null-label</span></code> inputs, the initial setting of <code class="docutils literal notranslate"><span class="pre">labels_as_tags</span></code> cannot be<br>  changed in later chained modules. Attempts to change it will be silently ignored.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">set(string)</span></code></p></td>
+<td><p><pre>[<br>  “default”<br>]</pre></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_letsencrypt_email"></a> <a class="reference external" href="#input_letsencrypt_email">letsencrypt_email</a></p></td>
+<td><p>Email to use for https setup. Not needed unless enable_ssl</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;hello&#64;gmail.com&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_name"></a> <a class="reference external" href="#input_name">name</a></p></td>
+<td><p>ID element. Usually the component or solution name, e.g. ‘app’ or ‘jenkins’.<br>This is the only ID element not also included as a <code class="docutils literal notranslate"><span class="pre">tag</span></code>.<br>The “name” tag is set to the full <code class="docutils literal notranslate"><span class="pre">id</span></code> string. There is no tag with the value of the <code class="docutils literal notranslate"><span class="pre">name</span></code> input.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_namespace"></a> <a class="reference external" href="#input_namespace">namespace</a></p></td>
+<td><p>ID element. Usually an abbreviation of your organization name, e.g. ‘eg’ or ‘cp’, to help ensure generated IDs are globally unique</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_regex_replace_chars"></a> <a class="reference external" href="#input_regex_replace_chars">regex_replace_chars</a></p></td>
+<td><p>Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, <code class="docutils literal notranslate"><span class="pre">&quot;/[^a-zA-Z0-9-]/&quot;</span></code> is used to remove all characters other than hyphens, letters and digits.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_region"></a> <a class="reference external" href="#input_region">region</a></p></td>
+<td><p>AWS Region</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;us-east-1&quot;</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_render_cluster_issuer"></a> <a class="reference external" href="#input_render_cluster_issuer">render_cluster_issuer</a></p></td>
+<td><p>Create a cluster-issuer.yaml file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_render_ingress"></a> <a class="reference external" href="#input_render_ingress">render_ingress</a></p></td>
+<td><p>Render ingress.yaml file - only useful if installing an additional service such as nginx</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_stage"></a> <a class="reference external" href="#input_stage">stage</a></p></td>
+<td><p>ID element. Usually used to indicate role, e.g. ‘prod’, ‘staging’, ‘source’, ‘build’, ‘test’, ‘deploy’, ‘release’</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_tags"></a> <a class="reference external" href="#input_tags">tags</a></p></td>
+<td><p>Additional tags (e.g. <code class="docutils literal notranslate"><span class="pre">{'BusinessUnit':</span> <span class="pre">'XYZ'}</span></code>).<br>Neither the tag keys nor the tag values will be modified by this module.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">map(string)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="input_tenant"></a> <a class="reference external" href="#input_tenant">tenant</a></p></td>
+<td><p>ID element _(Rarely used, not included by default)_. A customer identifier, indicating who this instance of a resource is for</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="input_use_existing_ingress"></a> <a class="reference external" href="#input_use_existing_ingress">use_existing_ingress</a></p></td>
+<td><p>Use existing ingress</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td class="text-align:center"><p>no</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a name="output_aws_elb"></a> <a class="reference external" href="#output_aws_elb">aws_elb</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="output_aws_elb_helm"></a> <a class="reference external" href="#output_aws_elb_helm">aws_elb_helm</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="output_aws_route53_record_helm"></a> <a class="reference external" href="#output_aws_route53_record_helm">aws_route53_record_helm</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="output_id"></a> <a class="reference external" href="#output_id">id</a></p></td>
+<td><p>ID of the created example</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="output_ingress_template"></a> <a class="reference external" href="#output_ingress_template">ingress_template</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-odd"><td><p><a name="output_kubernetes_service"></a> <a class="reference external" href="#output_kubernetes_service">kubernetes_service</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p><a name="output_kubernetes_service_helm"></a> <a class="reference external" href="#output_kubernetes_service_helm">kubernetes_service_helm</a></p></td>
+<td><p>n/a</p></td>
+</tr>
+</tbody>
+</table>
+<!-- markdownlint-restore -->
+</div>
+<div class="section" id="share-the-love">
+<h2>Share the Love<a class="headerlink" href="#share-the-love" title="Permalink to this headline">¶</a></h2>
+<p>Like this project? Please give it a ★ on <a class="reference external" href="https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-helm">our GitHub</a>! (it helps <strong>a lot</strong>)</p>
+</div>
+<div class="section" id="related-projects">
+<h2>Related Projects<a class="headerlink" href="#related-projects" title="Permalink to this headline">¶</a></h2>
+<p>Check out these related projects.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-autoscaling">terraform-aws-eks-autoscaling</a> - Terraform module to provision an Autoscaling EKS Cluster. Acts as a wrapper around cloudposse/terraform-aws-eks-cluster and cloudposse/terraform-aws-eks-node-groups</p></li>
+<li><p><a class="reference external" href="https://github.com/cloudposse/terraform-aws-eks-workers">terraform-aws-eks-cluster</a> - Terraform module to deploy an AWS EKS Cluster.</p></li>
+<li><p><a class="reference external" href="https://github.com/cloudposse/terraform-aws-eks-node-group">terraform-aws-eks-node-group</a> - Terraform module to provision an EKS Node Group</p></li>
+<li><p><a class="reference external" href="https://zero-to-jupyterhub.readthedocs.io/">Zero to Kubernetes</a> - JupyterHub allows users to interact with a computing environment through a webpage. As most devices have access to a web browser, JupyterHub makes it is easy to provide and standardize the computing environment for a group of people (e.g., for a class of students or an analytics team).</p></li>
+</ul>
+<p>This project will help you set up your own JupyterHub on a cloud/on-prem k8s environment and leverage its scalable nature to support a large group of users. Thanks to Kubernetes, we are not tied to a specific cloud provider.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gateway.dask.org/">Dask Gateway</a> - Dask Gateway provides a secure, multi-tenant server for managing Dask clusters. It allows users to launch and use Dask clusters in a shared, centrally managed cluster environment, without requiring users to have direct access to the underlying cluster backend (e.g. Kubernetes, Hadoop/YARN, HPC Job queues, etc…).</p></li>
+<li><p><a class="reference external" href="https://github.com/dask/helm-chart/blob/main/daskhub/README.md">DaskHub</a> - This chart provides a multi-user, Dask-Gateway enabled JupyterHub. It combines the JupyterHub and Dask Gateway helm charts.</p></li>
+<li><p><a class="reference external" href="https://docs.dask.org/en/latest/">Dask</a> - Dask is a flexible library for parallel computing in Python.</p></li>
+<li><p><a class="reference external" href="https://github.com/cloudposse/terraform-aws-ec2-autoscale-group">terraform-aws-ec2-autoscale-group</a> - Terraform module to provision Auto Scaling Group and Launch Template on AWS</p></li>
+<li><p><a class="reference external" href="https://github.com/cloudposse/terraform-aws-ec2-instance">terraform-aws-ec2-instance</a> - Terraform module for providing a general purpose EC2 instance</p></li>
+<li><p><a class="reference external" href="https://github.com/cloudposse/terraform-aws-ec2-instance-group">terraform-aws-ec2-instance-group</a> - Terraform module for provisioning multiple general purpose EC2 hosts for stateful applications</p></li>
+<li><p><a class="reference external" href="https://github.com/cloudposse/terraform-null-label">terraform-null-label</a> - Terraform module designed to generate consistent names and tags for resources. Use terraform-null-label to implement a strict naming convention.</p></li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>For additional context, refer to some of these links.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.terraform.io/docs/modules/index.html#standard-module-structure">Terraform Standard Module Structure</a> - HashiCorp’s standard module structure is a file and directory layout we recommend for reusable modules distributed in separate repositories.</p></li>
+<li><p><a class="reference external" href="https://www.terraform.io/docs/registry/modules/publish.html#requirements">Terraform Module Requirements</a> - HashiCorp’s guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy.</p></li>
+<li><p><a class="reference external" href="https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer">Terraform <code class="docutils literal notranslate"><span class="pre">random_integer</span></code> Resource</a> - The resource random_integer generates random values from a given range, described by the min and max attributes of a given resource.</p></li>
+<li><p><a class="reference external" href="https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version">Terraform Version Pinning</a> - The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration</p></li>
+</ul>
+</div>
+<div class="section" id="help">
+<h2>Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h2>
+<p><strong>Got a question?</strong> We got answers.</p>
+<p>File a GitHub <a class="reference external" href="https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-helm/issues">issue</a>, send us an <a class="reference external" href="mailto:jillian&#37;&#52;&#48;dabbleofdevops&#46;com">jillian<span>&#64;</span>dabbleofdevops<span>&#46;</span>com</a>.</p>
+</div>
+<div class="section" id="bioinformatics-infrastructure-on-aws-for-startups">
+<h2>Bioinformatics Infrastructure on AWS for Startups<a class="headerlink" href="#bioinformatics-infrastructure-on-aws-for-startups" title="Permalink to this headline">¶</a></h2>
+<p>I’ll help you build your data science cloud infrastructure from the ground up so you can own it using open source software. Then I’ll show you how to operate it and stick around for as long as you need us.</p>
+<p><a class="reference external" href="https://www.dabbleofdevops.com">Learn More</a></p>
+<p>Work directly with me via email, slack, and video conferencing.</p>
+<ul class="simple">
+<li><p><strong>Scientific Workflow Automation and Optimization.</strong> Got workflows that are giving you trouble? Let’s work together to ensure that your analyses run with or without your scientists being fully caffeinated.</p></li>
+<li><p><strong>High Performance Compute Infrastructure.</strong> Highly available, auto scaling clusters to analyze <em>all the (bioinformatics related!) things</em>. All setups are completely integrated with your workflow system of choice, whether that is Airflow, Prefect, Snakemake or Nextflow.</p></li>
+<li><p><strong>Kubernetes and AWS Batch Setup for Apache Airflow</strong> Orchestrate your Bioinformatics Workflows with Apache Airflow. Get full auditing, SLA, logging and monitoring for your workflows running on AWS Batch.</p></li>
+<li><p><strong>High Performance Compute Setup that Int</strong> You’ll have built-in governance with accountability and audit logs for all changes.</p></li>
+<li><p><strong>Docker Images</strong> Get advice and hands on training for your team to build complex software stacks onto docker images.</p></li>
+<li><p><strong>Training.</strong> You’ll receive hands-on training so your team can operate what we build.</p></li>
+<li><p><strong>Questions.</strong> You’ll have a direct line of communication between our teams via a Shared Slack channel.</p></li>
+<li><p><strong>Troubleshooting.</strong> You’ll get help to triage when things aren’t working.</p></li>
+<li><p><strong>Bug Fixes.</strong> We’ll rapidly work with you to fix any bugs in our projects.</p></li>
+</ul>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bug-reports-feature-requests">
+<h3>Bug Reports &amp; Feature Requests<a class="headerlink" href="#bug-reports-feature-requests" title="Permalink to this headline">¶</a></h3>
+<p>Please use the <a class="reference external" href="https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-helm/issues">issue tracker</a> to report any bugs or file feature requests.</p>
+</div>
+<div class="section" id="developing">
+<h3>Developing<a class="headerlink" href="#developing" title="Permalink to this headline">¶</a></h3>
+<p>If you are interested in being a contributor and want to get involved in developing this project or help out with other projects, I would love to hear from you! Shoot me an email at <a class="reference external" href="mailto:jillian&#37;&#52;&#48;dabbleofdevops&#46;com">jillian<span>&#64;</span>dabbleofdevops<span>&#46;</span>com</a>.</p>
+<p>In general, PRs are welcome. We follow the typical “fork-and-pull” Git workflow.</p>
+<ol class="simple">
+<li><p><strong>Fork</strong> the repo on GitHub</p></li>
+<li><p><strong>Clone</strong> the project to your own machine</p></li>
+<li><p><strong>Commit</strong> changes to your own branch</p></li>
+<li><p><strong>Push</strong> your work back up to your fork</p></li>
+<li><p>Submit a <strong>Pull Request</strong> so that we can review your changes</p></li>
+</ol>
+<div class="section" id="developer-notes">
+<h4>Developer Notes<a class="headerlink" href="#developer-notes" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">README.md</span></code> is created using the standard <a class="reference external" href="https://github.com/cloudposse/terraform-example-module">CloudPosse</a> template that has been modified to use BioAnalyze information and URLs, and other documentation is generated using <a class="reference external" href="https://jupyterbook.org/">jupyter-book</a>.</p>
+<p>Terraform code does not render properly when using the <code class="docutils literal notranslate"><span class="pre">literalinclude</span></code> directive, so instead we use <code class="docutils literal notranslate"><span class="pre">pygmentize</span></code> to render it to html which is included directly.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">raw</span><span class="p">::</span> <span class="n">html</span>
+   <span class="p">:</span><span class="n">file</span><span class="p">:</span> <span class="o">./</span><span class="n">_html</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">tf</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> Be sure to merge the latest changes from “upstream” before making a pull request!</p>
+</div>
+</div>
+</div>
+<div class="section" id="copyrights">
+<h2>Copyrights<a class="headerlink" href="#copyrights" title="Permalink to this headline">¶</a></h2>
+<p>Copyright © 2020-2021 <a class="reference external" href="https://www.dabbleofdevops.com">Dabble of DevOps, SCorp</a></p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
+<p>See <span class="xref myst">LICENSE</span> for full details.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+&quot;License&quot;); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+</pre></div>
+</div>
+</div>
+<div class="section" id="trademarks">
+<h2>Trademarks<a class="headerlink" href="#trademarks" title="Permalink to this headline">¶</a></h2>
+<p>All other trademarks referenced herein are the property of their respective owners.</p>
+<div class="section" id="contributors">
+<h3>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h3>
+<!-- markdownlint-disable -->
+<p>|  <a class="reference external" href="https://github.com/jerowe"><img alt="Jillian Rowe" src="https://img.cloudposse.com/150x150/https://github.com/jerowe.png" /></a><br/><a class="reference external" href="https://github.com/jerowe">Jillian Rowe</a> |</p>
+<!-- markdownlint-restore -->
+<p>Learn more at <a class="reference external" href="https://www.dabbleofdevops.com">Dabble of DevOps</a></p>
+</div>
+</div>
+<div class="section" id="sponsor">
+<h2>Sponsor<a class="headerlink" href="#sponsor" title="Permalink to this headline">¶</a></h2>
+<p>BioAnalyze is and will always be open source. If you’ve found any of these resources helpful, please consider donating to the continued development of BioAnalyze.</p>
+<p><a class="reference external" href="https://github.com/sponsors/dabble-of-devops-bioanalyze">Sponsor BioAnalyze</a></p>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='right-next' id="next-link" href="examples/examples.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Examples</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By BioAnalyze<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

@@ -18,7 +18,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_eks"></a> [eks](#module\_eks) | /root/terraform-recipes/terraform-aws-eks-autoscaling | n/a |
+| <a name="module_eks"></a> [eks](#module\_eks) | dabble-of-devops-bioanalyze/eks-autoscaling/aws | >= 1.19.0 |
 | <a name="module_nginx1"></a> [nginx1](#module\_nginx1) | ../.. | n/a |
 | <a name="module_nginx2"></a> [nginx2](#module\_nginx2) | ../.. | n/a |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |

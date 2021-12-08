@@ -1,0 +1,220 @@
+<div class="highlight"><pre><span></span><span class="kr">provider</span> <span class="nv">&quot;aws&quot;</span> <span class="p">{</span>
+  <span class="na">region</span> <span class="o">=</span> <span class="nv">var.region</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span> <span class="nv">&quot;http&quot;</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="kr">provider</span> <span class="nv">&quot;tls&quot;</span> <span class="p">{</span>
+<span class="p">}</span><span class="c1"></span>
+
+<span class="c1">#############################################################</span>
+<span class="c1"># Networking</span>
+<span class="c1">#############################################################</span>
+
+<span class="kr">data</span> <span class="nc">&quot;aws_availability_zones&quot;</span> <span class="nv">&quot;available&quot;</span> <span class="p">{</span>
+<span class="c1">  # exclude us-east-1e, not allowed</span>
+<span class="c1">  # exclude_names = [&quot;us-east-1e&quot;]</span>
+<span class="p">}</span>
+
+<span class="kr">data</span> <span class="nc">&quot;aws_caller_identity&quot;</span> <span class="nv">&quot;current&quot;</span> <span class="p">{</span><span class="err">}</span>
+
+<span class="kr">resource</span> <span class="nc">&quot;aws_default_vpc&quot;</span> <span class="nv">&quot;default&quot;</span> <span class="p">{</span>
+  <span class="nb">tags</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">Name</span> <span class="o">=</span> <span class="s2">&quot;Default VPC&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">output</span> <span class="nv">&quot;vpc&quot;</span> <span class="p">{</span>
+  <span class="na">value</span> <span class="o">=</span> <span class="nv">aws_default_vpc.default</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span> <span class="nc">&quot;aws_default_subnet&quot;</span> <span class="nv">&quot;default_az&quot;</span> <span class="p">{</span>
+  <span class="na">count</span>             <span class="o">=</span> <span class="nf">length</span><span class="p">(</span><span class="nv">data.aws_availability_zones.available.names</span><span class="p">)</span>
+  <span class="na">availability_zone</span> <span class="o">=</span> <span class="nv">data.aws_availability_zones.available.names[count.index</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kr">output</span> <span class="nv">&quot;aws_default_subnet&quot;</span> <span class="p">{</span>
+  <span class="na">value</span> <span class="o">=</span> <span class="nv">aws_default_subnet.default_az</span>
+<span class="p">}</span>
+
+<span class="nb">locals</span> <span class="p">{</span><span class="c1"></span>
+<span class="c1">  # create vpc and subnets</span>
+  <span class="na">vpc_id</span>     <span class="o">=</span> <span class="nv">aws_default_vpc.default.id</span>
+  <span class="na">subnet_ids</span> <span class="o">=</span> <span class="nv">aws_default_subnet.default_az</span><span class="p">[</span><span class="err">*</span><span class="p">].</span><span class="err">id</span>
+<span class="p">}</span>
+
+<span class="kr">output</span> <span class="nv">&quot;subnet_ids&quot;</span> <span class="p">{</span>
+  <span class="na">value</span> <span class="o">=</span> <span class="nv">local.subnet_ids</span>
+<span class="p">}</span><span class="c1"></span>
+
+<span class="c1">#############################################################</span>
+<span class="c1"># Admin EKS Cluster</span>
+<span class="c1">#############################################################</span>
+
+<span class="c1"># https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html</span>
+<span class="kr">module</span> <span class="nv">&quot;eks&quot;</span> <span class="p">{</span>
+  <span class="na">source</span>  <span class="o">=</span> <span class="s2">&quot;dabble-of-devops-bioanalyze/eks-autoscaling/aws&quot;</span>
+  <span class="na">version</span> <span class="o">=</span> <span class="s2">&quot;&gt;= 1.19.0&quot;</span>
+
+  <span class="na">region</span>                                        <span class="o">=</span> <span class="nv">var.region</span>
+  <span class="na">vpc_id</span>                                        <span class="o">=</span> <span class="nv">local.vpc_id</span>
+  <span class="na">subnet_ids</span>                                    <span class="o">=</span> <span class="nv">local.subnet_ids</span>
+  <span class="na">kubernetes_version</span>                            <span class="o">=</span> <span class="s2">&quot;1.19&quot;</span>
+  <span class="na">oidc_provider_enabled</span>                         <span class="o">=</span> <span class="no">true</span>
+  <span class="na">cluster_encryption_config_enabled</span>             <span class="o">=</span> <span class="no">true</span>
+  <span class="na">eks_node_groups</span>                               <span class="o">=</span> <span class="nv">var.eks_node_groups</span>
+  <span class="na">eks_node_group_autoscaling_enabled</span>            <span class="o">=</span> <span class="no">true</span>
+  <span class="na">eks_worker_group_autoscaling_policies_enabled</span> <span class="o">=</span> <span class="no">true</span>
+  <span class="na">install_ingress</span>                               <span class="o">=</span> <span class="no">true</span>
+  <span class="na">letsencrypt_email</span>                             <span class="o">=</span> <span class="s2">&quot;jillian@dabbleofdevops.com&quot;</span>
+
+  <span class="na">context</span> <span class="o">=</span> <span class="nv">module.this.context</span>
+<span class="p">}</span>
+
+<span class="kr">data</span> <span class="nc">&quot;null_data_source&quot;</span> <span class="nv">&quot;wait_for_cluster_and_kubernetes_configmap&quot;</span> <span class="p">{</span>
+  <span class="nb">inputs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">cluster_name</span>             <span class="o">=</span> <span class="nv">module.eks.eks_cluster_id</span>
+    <span class="na">kubernetes_config_map_id</span> <span class="o">=</span> <span class="nv">module.eks.eks_cluster.kubernetes_config_map_id</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">data</span> <span class="nc">&quot;aws_eks_cluster&quot;</span> <span class="nv">&quot;cluster&quot;</span> <span class="p">{</span>
+  <span class="na">depends_on</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nv">module.eks</span>
+  <span class="p">]</span>
+  <span class="na">name</span> <span class="o">=</span> <span class="nv">module.eks.eks_cluster_id</span>
+<span class="p">}</span>
+
+<span class="kr">data</span> <span class="nc">&quot;aws_eks_cluster_auth&quot;</span> <span class="nv">&quot;cluster&quot;</span> <span class="p">{</span>
+  <span class="na">depends_on</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nv">module.eks</span>
+  <span class="p">]</span>
+  <span class="na">name</span> <span class="o">=</span> <span class="nv">module.eks.eks_cluster_id</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span> <span class="nv">&quot;kubernetes&quot;</span> <span class="p">{</span>
+  <span class="na">host</span>                   <span class="o">=</span> <span class="nv">data.aws_eks_cluster.cluster.endpoint</span>
+  <span class="na">cluster_ca_certificate</span> <span class="o">=</span> <span class="nf">base64decode</span><span class="p">(</span><span class="nv">data.aws_eks_cluster.cluster.certificate_authority.0.data</span><span class="p">)</span>
+  <span class="na">token</span>                  <span class="o">=</span> <span class="nv">data.aws_eks_cluster_auth.cluster.token</span>
+<span class="p">}</span><span class="c1"></span>
+
+<span class="c1"># weird new bug in provider</span>
+<span class="c1"># https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1234</span>
+
+<span class="kr">provider</span> <span class="nv">&quot;helm&quot;</span> <span class="p">{</span>
+  <span class="nb">kubernetes</span> <span class="p">{</span>
+    <span class="na">config_path</span> <span class="o">=</span> <span class="s2">&quot;~/.kube/config&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span> <span class="nc">&quot;null_resource&quot;</span> <span class="nv">&quot;kubectl_update&quot;</span> <span class="p">{</span>
+  <span class="na">depends_on</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nv">module.eks</span><span class="p">,</span>
+    <span class="nv">data.aws_eks_cluster_auth.cluster</span>
+  <span class="p">]</span>
+  <span class="kr">provisioner</span> <span class="nv">&quot;local-exec&quot;</span> <span class="p">{</span>
+    <span class="na">command</span> <span class="o">=</span> <span class="s2">&quot;aws eks --region $AWS_REGION update-kubeconfig --name $NAME&quot;</span>
+    <span class="nb">environment</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">AWS_REGION</span> <span class="o">=</span> <span class="nv">var.region</span>
+      <span class="na">NAME</span>       <span class="o">=</span> <span class="nv">module.eks.eks_cluster_id</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">output</span> <span class="nv">&quot;eks&quot;</span> <span class="p">{</span>
+  <span class="na">value</span> <span class="o">=</span> <span class="nv">module.eks</span>
+<span class="p">}</span>
+
+<span class="kr">module</span> <span class="nv">&quot;nginx1&quot;</span> <span class="p">{</span>
+  <span class="na">depends_on</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nv">module.eks</span><span class="p">,</span>
+    <span class="nv">null_resource.kubectl_update</span><span class="p">,</span>
+  <span class="p">]</span>
+  <span class="nb">providers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">aws</span>        <span class="o">=</span> <span class="err">aws</span>
+    <span class="na">kubernetes</span> <span class="o">=</span> <span class="err">kubernetes</span>
+    <span class="na">helm</span>       <span class="o">=</span> <span class="err">helm</span>
+    <span class="na">http</span>       <span class="o">=</span> <span class="err">http</span>
+  <span class="p">}</span>
+
+  <span class="na">source</span>                     <span class="o">=</span> <span class="s2">&quot;../..&quot;</span>
+  <span class="na">aws_route53_record_name</span>    <span class="o">=</span> <span class="s2">&quot;nginx1&quot;</span>
+  <span class="na">aws_route53_zone_name</span>      <span class="o">=</span> <span class="nv">var.aws_route53_zone_name</span>
+  <span class="na">helm_release_name</span>          <span class="o">=</span> <span class="s2">&quot;nginx1&quot;</span>
+  <span class="na">helm_release_repository</span>    <span class="o">=</span> <span class="s2">&quot;https://charts.bitnami.com/bitnami&quot;</span>
+  <span class="na">helm_release_chart</span>         <span class="o">=</span> <span class="s2">&quot;nginx&quot;</span>
+  <span class="na">helm_release_version</span>       <span class="o">=</span> <span class="s2">&quot;9.5.16&quot;</span>
+  <span class="na">helm_release_wait</span>          <span class="o">=</span> <span class="no">false</span>
+  <span class="na">helm_release_values_files</span>  <span class="o">=</span> <span class="p">[</span><span class="nf">abspath</span><span class="p">(</span><span class="s2">&quot;${path.module}/helm_charts/nginx1/values.yaml&quot;</span><span class="p">)]</span>
+  <span class="na">helm_release_values_dir</span>    <span class="o">=</span> <span class="nf">abspath</span><span class="p">(</span><span class="s2">&quot;${path.module}/helm_charts/nginx1&quot;</span><span class="p">)</span>
+  <span class="na">enable_ssl</span>                 <span class="o">=</span> <span class="no">true</span>
+  <span class="na">render_cluster_issuer</span>      <span class="o">=</span> <span class="no">true</span>
+  <span class="na">install_ingress</span>            <span class="o">=</span> <span class="no">false</span>
+  <span class="na">use_existing_ingress</span>       <span class="o">=</span> <span class="no">true</span>
+  <span class="na">existing_ingress_name</span>      <span class="o">=</span> <span class="s2">&quot;nginx-ingress-ingress-nginx-ingress-controller&quot;</span>
+  <span class="na">existing_ingress_namespace</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+  <span class="na">letsencrypt_email</span>          <span class="o">=</span> <span class="s2">&quot;jillian@dabbleofdevops.com&quot;</span>
+  <span class="na">context</span>                    <span class="o">=</span> <span class="nv">module.this.context</span>
+<span class="p">}</span>
+
+<span class="kr">output</span> <span class="nv">&quot;nginx1&quot;</span> <span class="p">{</span>
+  <span class="na">value</span> <span class="o">=</span> <span class="nv">module.nginx1</span>
+<span class="p">}</span>
+
+<span class="kr">module</span> <span class="nv">&quot;nginx2&quot;</span> <span class="p">{</span>
+  <span class="na">depends_on</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nv">module.eks</span><span class="p">,</span>
+    <span class="nv">null_resource.kubectl_update</span><span class="p">,</span>
+  <span class="p">]</span>
+  <span class="nb">providers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">aws</span>        <span class="o">=</span> <span class="err">aws</span>
+    <span class="na">kubernetes</span> <span class="o">=</span> <span class="err">kubernetes</span>
+    <span class="na">helm</span>       <span class="o">=</span> <span class="err">helm</span>
+    <span class="na">http</span>       <span class="o">=</span> <span class="err">http</span>
+  <span class="p">}</span>
+
+  <span class="na">source</span>                     <span class="o">=</span> <span class="s2">&quot;../..&quot;</span>
+  <span class="na">aws_route53_record_name</span>    <span class="o">=</span> <span class="s2">&quot;nginx2&quot;</span>
+  <span class="na">aws_route53_zone_name</span>      <span class="o">=</span> <span class="nv">var.aws_route53_zone_name</span>
+  <span class="na">helm_release_name</span>          <span class="o">=</span> <span class="s2">&quot;nginx2&quot;</span>
+  <span class="na">helm_release_repository</span>    <span class="o">=</span> <span class="s2">&quot;https://charts.bitnami.com/bitnami&quot;</span>
+  <span class="na">helm_release_chart</span>         <span class="o">=</span> <span class="s2">&quot;nginx&quot;</span>
+  <span class="na">helm_release_version</span>       <span class="o">=</span> <span class="s2">&quot;9.5.16&quot;</span>
+  <span class="na">helm_release_wait</span>          <span class="o">=</span> <span class="no">false</span>
+  <span class="na">helm_release_values_files</span>  <span class="o">=</span> <span class="p">[</span><span class="nf">abspath</span><span class="p">(</span><span class="s2">&quot;${path.module}/helm_charts/nginx2/values.yaml&quot;</span><span class="p">)]</span>
+  <span class="na">helm_release_values_dir</span>    <span class="o">=</span> <span class="nf">abspath</span><span class="p">(</span><span class="s2">&quot;${path.module}/helm_charts/nginx2&quot;</span><span class="p">)</span>
+  <span class="na">enable_ssl</span>                 <span class="o">=</span> <span class="no">true</span>
+  <span class="na">render_cluster_issuer</span>      <span class="o">=</span> <span class="no">true</span>
+  <span class="na">install_ingress</span>            <span class="o">=</span> <span class="no">false</span>
+  <span class="na">use_existing_ingress</span>       <span class="o">=</span> <span class="no">true</span>
+  <span class="na">existing_ingress_name</span>      <span class="o">=</span> <span class="s2">&quot;nginx-ingress-ingress-nginx-ingress-controller&quot;</span>
+  <span class="na">existing_ingress_namespace</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+  <span class="na">letsencrypt_email</span>          <span class="o">=</span> <span class="s2">&quot;jillian@dabbleofdevops.com&quot;</span>
+  <span class="na">context</span>                    <span class="o">=</span> <span class="nv">module.this.context</span>
+<span class="p">}</span>
+
+<span class="kr">output</span> <span class="nv">&quot;nginx2&quot;</span> <span class="p">{</span>
+  <span class="na">value</span> <span class="o">=</span> <span class="nv">module.nginx2</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span> <span class="nc">&quot;null_resource&quot;</span> <span class="nv">&quot;pytest&quot;</span> <span class="p">{</span>
+  <span class="na">count</span> <span class="o">=</span> <span class="nv">var.run_tests</span> <span class="p">?</span> <span class="m">1</span> <span class="p">:</span> <span class="m">0</span>
+  <span class="na">depends_on</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nv">module.nginx1</span><span class="p">,</span>
+    <span class="nv">module.nginx2</span><span class="p">,</span>
+  <span class="p">]</span>
+  <span class="nb">triggers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">always_run</span> <span class="o">=</span> <span class="nf">timestamp</span><span class="p">()</span>
+  <span class="p">}</span>
+  <span class="kr">provisioner</span> <span class="nv">&quot;local-exec&quot;</span> <span class="p">{</span>
+    <span class="na">command</span> <span class="o">=</span> <span class="s2">&quot;pip install -r tests/requirements.txt; python -m pytest -s --log-cli-level=INFO tests/test_helm_charts.py&quot;</span>
+    <span class="nb">environment</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">AWS_REGION</span>         <span class="o">=</span> <span class="nv">var.region</span>
+      <span class="na">AWS_DEFAULT_REGION</span> <span class="o">=</span> <span class="nv">var.region</span>
+      <span class="na">LOG_LEVEL</span>          <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>

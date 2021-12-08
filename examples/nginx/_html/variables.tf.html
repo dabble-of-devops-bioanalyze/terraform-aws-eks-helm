@@ -1,0 +1,158 @@
+<div class="highlight"><pre><span></span><span class="c1">##################################################</span>
+<span class="c1"># Variables</span>
+<span class="c1"># This file has various groupings of variables</span>
+<span class="c1">##################################################</span>
+
+<span class="c1">##################################################</span>
+<span class="c1"># AWS</span>
+<span class="c1">##################################################</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;region&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;us-east-1&quot;</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;AWS Region&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;aws_availability_zones_exclude&quot;</span> <span class="p">{</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;availability zones to exclude&quot;</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="err">any</span><span class="p">)</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="p">[]</span>
+<span class="p">}</span><span class="c1"></span>
+
+<span class="c1">##################################################</span>
+<span class="c1"># AWS EKS</span>
+<span class="c1">##################################################</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;eks_node_groups&quot;</span> <span class="p">{</span>
+  <span class="na">type</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="kt">object</span><span class="p">({</span>
+    <span class="na">instance_types</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="kt">string</span><span class="p">)</span>
+    <span class="na">desired_size</span>   <span class="o">=</span> <span class="kt">number</span>
+    <span class="na">min_size</span>       <span class="o">=</span> <span class="kt">number</span>
+    <span class="na">max_size</span>       <span class="o">=</span> <span class="kt">number</span>
+    <span class="na">disk_size</span>      <span class="o">=</span> <span class="kt">number</span>
+    <span class="na">name</span>           <span class="o">=</span> <span class="kt">string</span>
+  <span class="p">}))</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;EKS Node Groups&quot;</span>
+  <span class="na">default</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">name</span>           <span class="o">=</span> <span class="s2">&quot;node-group-1&quot;</span>
+      <span class="na">instance_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;t3a.medium&quot;, &quot;t3a.large&quot;, &quot;t3a.2xlarge&quot;, &quot;m4.10xlarge&quot;</span><span class="p">]</span>
+      <span class="na">desired_size</span>   <span class="o">=</span> <span class="m">1</span>
+      <span class="na">min_size</span>       <span class="o">=</span> <span class="m">0</span>
+      <span class="na">max_size</span>       <span class="o">=</span> <span class="m">450</span>
+      <span class="na">disk_size</span>      <span class="o">=</span> <span class="m">50</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span><span class="c1"></span>
+
+<span class="c1">##################################################</span>
+<span class="c1"># Helm Release Variables</span>
+<span class="c1"># corresponds to input to resource &quot;helm_release&quot;</span>
+<span class="c1">##################################################</span>
+
+<span class="c1"># name             = var.helm_release_name</span>
+<span class="c1"># repository       = &quot;https://charts.bitnami.com/bitnami&quot;</span>
+<span class="c1"># chart            = &quot;helm&quot;</span>
+<span class="c1"># version          = &quot;11.0.8&quot;</span>
+<span class="c1"># namespace        = var.helm_namespace</span>
+<span class="c1"># create_namespace = true</span>
+<span class="c1"># wait             = false</span>
+<span class="c1"># values = [file(&quot;helm_charts/helm/values.yaml&quot;)]</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_name&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;helm release name&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;helm&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_repository&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;helm release chart repository&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;https://charts.bitnami.com/bitnami&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_chart&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;helm release chart&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;airflow&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_namespace&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;helm release namespace&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_version&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;helm release version&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;11.0.8&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_wait&quot;</span> <span class="p">{</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Tell terraform to wait until the service comes up.&quot;</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">bool</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_create_namespace&quot;</span> <span class="p">{</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Create namespace if it does not exist&quot;</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">bool</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_values_dir&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Directory to put rendered values template files or additional keys. Should be helm_charts/{helm_release_name}&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;helm_charts&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_values_files&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="kt">string</span><span class="p">)</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;helm release values files - paths values files to add to helm install --values {}&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="p">[]</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;helm_release_merged_values_file&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Path to merged helm files. This path must exist before the module is invoked.&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">}</span><span class="c1"></span>
+
+<span class="c1">##################################################</span>
+<span class="c1"># Helm Release Variables - Enable SSL</span>
+<span class="c1"># corresponds to input to resource &quot;helm_release&quot;</span>
+<span class="c1">##################################################</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;enable_ssl&quot;</span> <span class="p">{</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Enable SSL Support?&quot;</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">bool</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span><span class="c1"></span>
+
+<span class="c1"># these variables are only needed if enable_ssl == true</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;letsencrypt_email&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Email to use for https setup. Not needed unless enable_ssl&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;hello@gmail.com&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;aws_route53_zone_name&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Name of the zone to add records. Do not forget the trailing &#39;.&#39; - &#39;test.com.&#39;&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;test.com.&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;aws_route53_record_name&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">string</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Record name to add to aws_route_53. Must be a valid subdomain - www,app,etc&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="s2">&quot;www&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span> <span class="nv">&quot;run_tests&quot;</span> <span class="p">{</span>
+  <span class="na">type</span>        <span class="o">=</span> <span class="kt">bool</span>
+  <span class="na">description</span> <span class="o">=</span> <span class="s2">&quot;Run pytests after install&quot;</span>
+  <span class="na">default</span>     <span class="o">=</span> <span class="no">true</span>
+<span class="p">}</span>
+</pre></div>

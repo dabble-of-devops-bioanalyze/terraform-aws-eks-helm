@@ -55,9 +55,8 @@ output "subnet_ids" {
 
 # https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
 module "eks" {
-  # source  = "dabble-of-devops-bioanalyze/eks-autoscaling/aws"
-  # version = ">= 1.18.0"
-  source = "/root/terraform-recipes/terraform-aws-eks-autoscaling"
+  source  = "dabble-of-devops-bioanalyze/eks-autoscaling/aws"
+  version = ">= 1.19.0"
 
   region                                        = var.region
   vpc_id                                        = local.vpc_id
@@ -176,7 +175,6 @@ module "nginx2" {
     http       = http
   }
 
-  # source                     = "/root/terraform-recipes/terraform-aws-eks-helm"
   source                     = "../.."
   aws_route53_record_name    = "nginx2"
   aws_route53_zone_name      = var.aws_route53_zone_name

@@ -7,9 +7,10 @@ ruamel.yaml
 pytest
 jupyter-book>0.12
 ipython
-formic
+formic2
 cookiecutter
 livereload
 colorlog
 GitPython
 boto3
+sphinx-sitemap

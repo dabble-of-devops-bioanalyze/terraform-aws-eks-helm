@@ -14,5 +14,3 @@ The second method is to deploy each application with a service type LoadBalancer
 
 ```{include} ./quickstart.md
 ```
-
-## More Tutorials Coming Soon
