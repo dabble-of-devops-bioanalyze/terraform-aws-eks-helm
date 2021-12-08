@@ -233,6 +233,10 @@ resource "helm_release" "helm" {
   values = [file(local.helm_release_merged_values_file)]
 }
 
+output "helm_release" {
+  value = helm_release.helm
+}
+
 resource "null_resource" "sleep_helm_update" {
   depends_on = [
     helm_release.helm
@@ -243,7 +247,7 @@ resource "null_resource" "sleep_helm_update" {
   provisioner "local-exec" {
     command = <<EOT
     echo "Waiting for the helm service to come up"
-    sleep 60
+    sleep 5m
     EOT
   }
 }

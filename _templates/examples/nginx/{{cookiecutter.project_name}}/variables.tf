@@ -138,16 +138,16 @@ variable "letsencrypt_email" {
   default     = "hello@gmail.com"
 }
 
-variable "aws_route53_zone_name" {
-  type        = string
-  description = "Name of the zone to add records. Do not forget the trailing '.' - 'test.com.'"
-  default     = "test.com."
-}
-
 variable "aws_route53_record_name" {
   type        = string
   description = "Record name to add to aws_route_53. Must be a valid subdomain - www,app,etc"
   default     = "www"
+}
+
+variable "aws_route53_zone_name" {
+  type        = string
+  description = "Name of the zone to add records. Do not forget the trailing '.' - 'test.com.'"
+  default     = "test.com."
 }
 
 variable "run_tests" {
