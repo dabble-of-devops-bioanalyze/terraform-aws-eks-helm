@@ -234,7 +234,8 @@ resource "helm_release" "helm" {
 }
 
 output "helm_release" {
-  value = helm_release.helm
+  value     = helm_release.helm
+  sensitive = true
 }
 
 resource "null_resource" "sleep_helm_update" {

@@ -4,7 +4,10 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+**/*.tfstate.*
 .terraform
+**/.terraform
+**/.terraform/**
 .terraform.tfstate.lock.info
 
 **/.vscode
