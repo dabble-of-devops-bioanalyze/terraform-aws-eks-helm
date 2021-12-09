@@ -124,7 +124,8 @@ resource "null_resource" "kubectl_update" {
 }
 
 output "eks" {
-  value = module.eks
+  value     = module.eks
+  sensitive = true
 }
 
 module "nginx1" {
