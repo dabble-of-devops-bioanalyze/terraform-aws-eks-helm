@@ -139,7 +139,7 @@ module "nginx1" {
     http       = http
   }
 
-  source                     = "../.."
+  source                     = "./../../"
   aws_route53_record_name    = "nginx1"
   aws_route53_zone_name      = var.aws_route53_zone_name
   helm_release_name          = "nginx1"
