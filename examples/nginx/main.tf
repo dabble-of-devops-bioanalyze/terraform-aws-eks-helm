@@ -160,7 +160,8 @@ module "nginx1" {
 }
 
 output "nginx1" {
-  value = module.nginx1
+  value     = module.nginx1
+  sensitive = true
 }
 
 module "nginx2" {
@@ -196,7 +197,8 @@ module "nginx2" {
 }
 
 output "nginx2" {
-  value = module.nginx2
+  value     = module.nginx2
+  sensitive = true
 }
 
 resource "null_resource" "pytest" {
