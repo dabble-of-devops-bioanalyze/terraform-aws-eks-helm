@@ -9,6 +9,8 @@
 **/.terraform
 **/.terraform/**
 .terraform.tfstate.lock.info
+.terraform.lock.hcl
+**/.terraform.lock.hcl
 
 **/.vscode
 **/.idea
