@@ -56,7 +56,7 @@ output "subnet_ids" {
 # https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
 module "eks" {
   source  = "dabble-of-devops-bioanalyze/eks-autoscaling/aws"
-  version = ">= 1.19.0"
+  version = ">= 1.20.0"
 
   region                                        = var.region
   vpc_id                                        = local.vpc_id
@@ -139,8 +139,11 @@ module "nginx1" {
     helm       = helm
     http       = http
   }
+  # source                     = "./../../"
+  source  = "dabble-of-devops-bioanalyze/eks-helm/aws"
+  version = ">= 0.0.2"
+  # insert the 12 required variables here
 
-  source                     = "./../../"
   aws_route53_record_name    = "nginx1"
   aws_route53_zone_name      = var.aws_route53_zone_name
   helm_release_name          = "nginx1"

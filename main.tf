@@ -39,8 +39,8 @@ resource "null_resource" "create_merged_file" {
 
 module "helm_ingress" {
   count                   = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
-  source                  = "dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws"
-  version                 = ">= 0.2.0"
+  source  = "dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws"
+  version = ">= 0.2.0"
   letsencrypt_email       = trimspace(var.letsencrypt_email)
   helm_release_values_dir = trimspace(var.helm_release_values_dir)
   helm_release_name       = trimspace(var.helm_release_name)
