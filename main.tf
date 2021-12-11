@@ -100,7 +100,7 @@ data "aws_elb" "helm_ingress_existing" {
 
 data "template_file" "cluster_issuer" {
   count    = var.enable_ssl == true && var.render_cluster_issuer == true ? 1 : 0
-  template = file("${path.module}/helm_charts/cluster-issuer.yaml.tpl")
+  template = file(local.cluster_issuer_template)
   vars = {
     name              = trimspace(var.helm_release_name)
     letsencrypt_email = trimspace(var.letsencrypt_email)
@@ -141,6 +141,7 @@ locals {
 
 locals {
   ingress_template = length(var.ingress_template) > 0 ? var.ingress_template : "${path.module}/helm_charts/bitnami/ingress.yaml.tpl"
+  cluster_issuer_template = length(var.cluster_issuer_template) > 0 ? var.cluster_issuer_template : "${path.module}/helm_charts/cluster_issuer.yaml.tpl"
 }
 
 output "kubernetes_service" {

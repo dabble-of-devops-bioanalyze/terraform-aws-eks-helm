@@ -140,6 +140,12 @@ variable "ingress_template" {
   default     = ""
 }
 
+variable "cluster_issuer_template" {
+  type        = string
+  description = "Path to cluster issuer template. Default cluster issuer is supplied."
+  default     = ""
+}
+
 variable "install_ingress" {
   type        = bool
   description = "Install the ingress helm chart. No will only fill out the cluster issuer, yes fills out the cluster issuer and installs. "
