@@ -39,8 +39,8 @@ resource "null_resource" "create_merged_file" {
 
 module "helm_ingress" {
   count                   = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
-  source  = "dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws"
-  version = ">= 0.2.0"
+  source                  = "dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws"
+  version                 = ">= 0.2.0"
   letsencrypt_email       = trimspace(var.letsencrypt_email)
   helm_release_values_dir = trimspace(var.helm_release_values_dir)
   helm_release_name       = trimspace(var.helm_release_name)
@@ -140,7 +140,7 @@ locals {
 }
 
 locals {
-  ingress_template = length(var.ingress_template) > 0 ? var.ingress_template : "${path.module}/helm_charts/bitnami/ingress.yaml.tpl"
+  ingress_template        = length(var.ingress_template) > 0 ? var.ingress_template : "${path.module}/helm_charts/bitnami/ingress.yaml.tpl"
   cluster_issuer_template = length(var.cluster_issuer_template) > 0 ? var.cluster_issuer_template : "${path.module}/helm_charts/cluster_issuer.yaml.tpl"
 }
 
