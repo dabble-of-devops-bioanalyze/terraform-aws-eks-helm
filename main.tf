@@ -1,11 +1,20 @@
+#######################################################
+# terraform-aws-eks-helm
+#######################################################
+
+locals {
+  ingress_template        = length(var.ingress_template) > 0 ? var.ingress_template : "${path.module}/helm_charts/bitnami/ingress.yaml.tpl"
+  cluster_issuer_template = length(var.cluster_issuer_template) > 0 ? var.cluster_issuer_template : "${path.module}/helm_charts/cluster-issuer.yaml.tpl"
+}
+
 resource "null_resource" "helm_dirs" {
   provisioner "local-exec" {
     command = "mkdir -p ${var.helm_release_values_dir}"
   }
 }
 
-# Merged values files
-# If one is not supplied supply it here
+# # merged values files
+# # if one is not supplied supply it here
 resource "random_string" "computed_values" {
   count            = length(var.helm_release_merged_values_file) == 0 ? 1 : 0
   length           = 10
@@ -19,7 +28,7 @@ locals {
   helm_release_merged_values_file = length(var.helm_release_merged_values_file) == 0 ? abspath("${var.helm_release_values_dir}/computed-${random_string.computed_values[0].result}-values.yaml") : var.helm_release_merged_values_file
 }
 
-# If the computed-values file does not exist we must create it first
+# # If the computed-values file does not exist we must create it first
 resource "null_resource" "create_merged_file" {
   depends_on = [
     local.helm_release_merged_values_file,
@@ -30,6 +39,7 @@ resource "null_resource" "create_merged_file" {
   }
   provisioner "local-exec" {
     command = <<EOT
+    mkdir -p ${var.helm_release_values_dir}
     touch ${local.helm_release_merged_values_file}
     touch ${var.helm_release_values_dir}/cluster-issuer.yaml
     touch ${var.helm_release_values_dir}/ingress.yaml
@@ -37,21 +47,26 @@ resource "null_resource" "create_merged_file" {
   }
 }
 
-module "helm_ingress" {
-  count                   = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
-  source                  = "dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws"
-  version                 = ">= 0.2.0"
-  letsencrypt_email       = trimspace(var.letsencrypt_email)
-  helm_release_values_dir = trimspace(var.helm_release_values_dir)
-  helm_release_name       = trimspace(var.helm_release_name)
-  helm_release_namespace  = trimspace(var.helm_release_namespace)
-  # we'll do this in the main module
-  render_cluster_issuer = false
-}
+# module "helm_ingress" {
+#   count                   = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
+#   # source                  = "dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws"
+#   # version                 = ">= 0.2.0"
+#   source                  = "/root/terraform-recipes/terraform-aws-eks-bitnami-nginx-ingress"
+#   letsencrypt_email       = trimspace(var.letsencrypt_email)
+#   helm_release_values_dir = trimspace(var.helm_release_values_dir)
+#   helm_release_name       = trimspace(var.helm_release_name)
+#   helm_release_namespace  = trimspace(var.helm_release_namespace)
+#   install_ingress =  var.install_ingress
+#   use_existing_ingress = var.use_existing_ingress
+#   existing_ingress_name = var.existing_ingress_name
+#   existing_ingress_namespace = var.existing_ingress_namespace
+#   # we'll do this in the main module
+#   render_cluster_issuer = false
+# }
 
-#################################################################
-# Case: Install new ingress
-#################################################################
+# #################################################################
+# # Case: Install new ingress
+# #################################################################
 
 data "kubernetes_service" "helm_ingress" {
   count = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
@@ -72,9 +87,9 @@ data "aws_elb" "helm_ingress" {
   name = split("-", data.kubernetes_service.helm_ingress[0].status.0.load_balancer.0.ingress.0.hostname)[0]
 }
 
-#################################################################
-# Case: Use Existing Ingress
-#################################################################
+# #################################################################
+# # Case: Use Existing Ingress
+# #################################################################
 
 data "kubernetes_service" "helm_ingress_existing" {
   count = var.enable_ssl == true && var.use_existing_ingress == true ? 1 : 0
@@ -129,9 +144,9 @@ resource "null_resource" "kubectl_apply_cluster_issuer" {
   }
 }
 
-########################################################
-# Get the ingress
-########################################################
+# ########################################################
+# # Get the ingress
+# ########################################################
 
 locals {
   kubernetes_service = var.enable_ssl == true && var.use_existing_ingress == true ? data.kubernetes_service.helm_ingress_existing : data.kubernetes_service.helm_ingress
@@ -139,10 +154,6 @@ locals {
   aws_elb = var.enable_ssl == true && var.use_existing_ingress == true ? data.aws_elb.helm_ingress_existing : data.aws_elb.helm_ingress
 }
 
-locals {
-  ingress_template        = length(var.ingress_template) > 0 ? var.ingress_template : "${path.module}/helm_charts/bitnami/ingress.yaml.tpl"
-  cluster_issuer_template = length(var.cluster_issuer_template) > 0 ? var.cluster_issuer_template : "${path.module}/helm_charts/cluster_issuer.yaml.tpl"
-}
 
 output "kubernetes_service" {
   value = local.kubernetes_service
@@ -156,9 +167,9 @@ output "ingress_template" {
   value = local.ingress_template
 }
 
-# TODO
-# Default uses a bitnami ingress setup. All bitnami charts use the same structure
-# Should check first if it's a bitnami chart, and if not warn
+# # TODO
+# # Default uses a bitnami ingress setup. All bitnami charts use the same structure
+# # Should check first if it's a bitnami chart, and if not warn
 data "template_file" "ingress" {
   count    = var.enable_ssl == true && var.render_ingress ? 1 : 0
   template = file(local.ingress_template)
@@ -186,7 +197,7 @@ locals {
       [
         [
           #TODO this fails if enable_ssl=false
-          var.enable_ssl == true && var.render_ingress ? abspath(local_file.rendered_ingress[0].filename) : null,
+          var.enable_ssl == true && var.render_ingress == true ? abspath(local_file.rendered_ingress[0].filename) : null,
         ],
         [for s in var.helm_release_values_files : abspath(s)],
       ]
@@ -207,10 +218,9 @@ module "merge_values" {
   helm_release_merged_values_file = local.helm_release_merged_values_file
 }
 
-
+# # TODO add in option for helm release vs rancher release
 resource "helm_release" "helm" {
   depends_on = [
-    module.helm_ingress,
     module.merge_values,
   ]
   name             = var.helm_release_name
@@ -221,6 +231,7 @@ resource "helm_release" "helm" {
   create_namespace = var.helm_release_create_namespace
   wait             = var.helm_release_wait
 
+  #TODO Caution against
   dynamic "set" {
     for_each = var.helm_release_sets
     content {
@@ -243,9 +254,6 @@ resource "null_resource" "sleep_helm_update" {
   depends_on = [
     helm_release.helm
   ]
-  triggers = {
-    always_run = timestamp()
-  }
   provisioner "local-exec" {
     command = <<EOT
     echo "Waiting for the helm service to come up"
@@ -254,18 +262,22 @@ resource "null_resource" "sleep_helm_update" {
   }
 }
 
-#########################################################################
-# AWS Route 53 Assign
-#########################################################################
+# #########################################################################
+# # AWS Route 53 Assign
+# #########################################################################
 
 data "aws_route53_zone" "helm" {
   count = var.enable_ssl == true ? 1 : 0
   name  = var.aws_route53_zone_name
 }
 
-#########################################################################
-# Helm Release Service Type == LoadBalancer
-#########################################################################
+output "aws_route53_zone_helm" {
+  value = data.aws_route53_zone.helm
+}
+
+# #########################################################################
+# # Helm Release Service Type == LoadBalancer
+# #########################################################################
 
 data "kubernetes_service" "load_balancer" {
   count = var.helm_release_values_service_type == "LoadBalancer" ? 1 : 0
@@ -343,6 +355,7 @@ output "aws_route53_record_cluster_ip" {
 
 locals {
   ssl_type = var.enable_ssl && var.helm_release_values_service_type == "ClusterIP" ? "cluster_ip" : "load_balancer"
+  dns_record = var.enable_ssl && var.helm_release_values_service_type == "ClusterIP" ? aws_route53_record.cluster_ip : aws_route53_record.load_balancer
 }
 
 output "ssl_type" {
