@@ -65,37 +65,11 @@ resource "null_resource" "create_merged_file" {
 # }
 
 # #################################################################
-# # Case: Install new ingress
-# #################################################################
-
-data "kubernetes_service" "helm_ingress" {
-  count = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
-  depends_on = [
-    module.helm_ingress
-  ]
-  metadata {
-    name      = "${var.helm_release_name}-ingress-nginx-ingress-controller"
-    namespace = var.helm_release_namespace
-  }
-}
-
-data "aws_elb" "helm_ingress" {
-  count = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
-  depends_on = [
-    data.kubernetes_service.helm_ingress[0]
-  ]
-  name = split("-", data.kubernetes_service.helm_ingress[0].status.0.load_balancer.0.ingress.0.hostname)[0]
-}
-
-# #################################################################
 # # Case: Use Existing Ingress
 # #################################################################
 
 data "kubernetes_service" "helm_ingress_existing" {
   count = var.enable_ssl == true && var.use_existing_ingress == true ? 1 : 0
-  depends_on = [
-    module.helm_ingress
-  ]
   metadata {
     name      = var.existing_ingress_name
     namespace = var.existing_ingress_namespace
@@ -311,7 +285,6 @@ output "aws_elb_load_balancer" {
 resource "aws_route53_record" "load_balancer" {
   count = var.enable_ssl && var.helm_release_values_service_type == "LoadBalancer" ? 1 : 0
   depends_on = [
-    module.helm_ingress,
     helm_release.helm,
   ]
   zone_id = data.aws_route53_zone.helm[0].zone_id
@@ -336,7 +309,6 @@ output "aws_route53_record_load_balancer" {
 resource "aws_route53_record" "cluster_ip" {
   count = var.enable_ssl && var.helm_release_values_service_type == "ClusterIP" ? 1 : 0
   depends_on = [
-    module.helm_ingress,
     helm_release.helm,
   ]
   zone_id = data.aws_route53_zone.helm[0].zone_id
