@@ -128,6 +128,10 @@ output "eks" {
   sensitive = true
 }
 
+data "aws_route53_zone" "helm" {
+  name = var.aws_route53_zone_name
+}
+
 module "nginx1" {
   depends_on = [
     module.eks,
@@ -144,8 +148,13 @@ module "nginx1" {
   version = ">= 0.0.2"
   # insert the 12 required variables here
 
+  # DNS
   aws_route53_record_name    = "nginx1"
   aws_route53_zone_name      = var.aws_route53_zone_name
+  aws_elb_dns_name    = module.eks.helm_ingress[0].aws_elb.dns_name
+  aws_elb_zone_id     = module.eks.helm_ingress[0].aws_elb.zone_id
+  aws_route53_zone_id = data.aws_route53_zone.helm.zone_id
+
   helm_release_name          = "nginx1"
   helm_release_repository    = "https://charts.bitnami.com/bitnami"
   helm_release_chart         = "nginx"
@@ -157,9 +166,8 @@ module "nginx1" {
   render_cluster_issuer      = true
   install_ingress            = false
   use_existing_ingress       = true
-  existing_ingress_name      = "nginx-ingress-ingress-nginx-ingress-controller"
-  existing_ingress_namespace = "default"
   letsencrypt_email          = "jillian@dabbleofdevops.com"
+
   context                    = module.this.context
 }
 
@@ -181,8 +189,14 @@ module "nginx2" {
   }
 
   source                     = "../.."
+
+  # DNS
   aws_route53_record_name    = "nginx2"
   aws_route53_zone_name      = var.aws_route53_zone_name
+  aws_elb_dns_name    = module.eks.helm_ingress[0].aws_elb.dns_name
+  aws_elb_zone_id     = module.eks.helm_ingress[0].aws_elb.zone_id
+  aws_route53_zone_id = data.aws_route53_zone.helm.zone_id
+
   helm_release_name          = "nginx2"
   helm_release_repository    = "https://charts.bitnami.com/bitnami"
   helm_release_chart         = "nginx"
@@ -194,8 +208,6 @@ module "nginx2" {
   render_cluster_issuer      = true
   install_ingress            = false
   use_existing_ingress       = true
-  existing_ingress_name      = "nginx-ingress-ingress-nginx-ingress-controller"
-  existing_ingress_namespace = "default"
   letsencrypt_email          = "jillian@dabbleofdevops.com"
   context                    = module.this.context
 }

@@ -47,42 +47,9 @@ resource "null_resource" "create_merged_file" {
   }
 }
 
-# module "helm_ingress" {
-#   count                   = var.enable_ssl == true && var.install_ingress == true ? 1 : 0
-#   # source                  = "dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws"
-#   # version                 = ">= 0.2.0"
-#   source                  = "/root/terraform-recipes/terraform-aws-eks-bitnami-nginx-ingress"
-#   letsencrypt_email       = trimspace(var.letsencrypt_email)
-#   helm_release_values_dir = trimspace(var.helm_release_values_dir)
-#   helm_release_name       = trimspace(var.helm_release_name)
-#   helm_release_namespace  = trimspace(var.helm_release_namespace)
-#   install_ingress =  var.install_ingress
-#   use_existing_ingress = var.use_existing_ingress
-#   existing_ingress_name = var.existing_ingress_name
-#   existing_ingress_namespace = var.existing_ingress_namespace
-#   # we'll do this in the main module
-#   render_cluster_issuer = false
-# }
-
 # #################################################################
 # # Case: Use Existing Ingress
 # #################################################################
-
-data "kubernetes_service" "helm_ingress_existing" {
-  count = var.enable_ssl == true && var.use_existing_ingress == true ? 1 : 0
-  metadata {
-    name      = var.existing_ingress_name
-    namespace = var.existing_ingress_namespace
-  }
-}
-
-data "aws_elb" "helm_ingress_existing" {
-  count = var.enable_ssl == true && var.use_existing_ingress == true ? 1 : 0
-  depends_on = [
-    data.kubernetes_service.helm_ingress_existing
-  ]
-  name = split("-", data.kubernetes_service.helm_ingress_existing[0].status.0.load_balancer.0.ingress.0.hostname)[0]
-}
 
 # If we are using an existing helm_ingress we'll still need to render a clusterissuer
 # This is duplicated from the nginx-ingress module
@@ -122,25 +89,6 @@ resource "null_resource" "kubectl_apply_cluster_issuer" {
 # # Get the ingress
 # ########################################################
 
-locals {
-  kubernetes_service = var.enable_ssl == true && var.use_existing_ingress == true ? data.kubernetes_service.helm_ingress_existing : data.kubernetes_service.helm_ingress
-  # if not using an ingress the aws_elb should point to the loadbalancer
-  aws_elb = var.enable_ssl == true && var.use_existing_ingress == true ? data.aws_elb.helm_ingress_existing : data.aws_elb.helm_ingress
-}
-
-
-output "kubernetes_service" {
-  value = local.kubernetes_service
-}
-
-output "aws_elb_ingress" {
-  value = local.aws_elb
-}
-
-output "ingress_template" {
-  value = local.ingress_template
-}
-
 # # TODO
 # # Default uses a bitnami ingress setup. All bitnami charts use the same structure
 # # Should check first if it's a bitnami chart, and if not warn
@@ -151,7 +99,6 @@ data "template_file" "ingress" {
     helm_release_name       = var.helm_release_name
     aws_route53_record_name = var.aws_route53_record_name
     aws_route53_domain_name = trimsuffix(var.aws_route53_zone_name, ".")
-    ingress_dns             = local.aws_elb[0].dns_name
     letsencrypt_email       = var.letsencrypt_email
   }
 }
@@ -240,15 +187,6 @@ resource "null_resource" "sleep_helm_update" {
 # # AWS Route 53 Assign
 # #########################################################################
 
-data "aws_route53_zone" "helm" {
-  count = var.enable_ssl == true ? 1 : 0
-  name  = var.aws_route53_zone_name
-}
-
-output "aws_route53_zone_helm" {
-  value = data.aws_route53_zone.helm
-}
-
 # #########################################################################
 # # Helm Release Service Type == LoadBalancer
 # #########################################################################
@@ -287,7 +225,7 @@ resource "aws_route53_record" "load_balancer" {
   depends_on = [
     helm_release.helm,
   ]
-  zone_id = data.aws_route53_zone.helm[0].zone_id
+  zone_id = var.aws_route53_zone_id
   name    = var.aws_route53_record_name
   type    = "A"
   alias {
@@ -311,12 +249,12 @@ resource "aws_route53_record" "cluster_ip" {
   depends_on = [
     helm_release.helm,
   ]
-  zone_id = data.aws_route53_zone.helm[0].zone_id
+  zone_id = var.aws_route53_zone_id
   name    = var.aws_route53_record_name
   type    = "A"
   alias {
-    name                   = local.aws_elb[0].dns_name
-    zone_id                = local.aws_elb[0].zone_id
+    name                   = var.aws_elb_dns_name
+    zone_id                = var.aws_elb_zone_id
     evaluate_target_health = true
   }
 }

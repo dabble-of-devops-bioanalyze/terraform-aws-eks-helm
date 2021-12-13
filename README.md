@@ -110,7 +110,7 @@ Available targets:
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 3.68.0 |
 | <a name="provider_helm"></a> [helm](#provider\_helm) | 2.4.1 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.7.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.7.1 |
 | <a name="provider_local"></a> [local](#provider\_local) | 2.1.0 |
 | <a name="provider_null"></a> [null](#provider\_null) | 3.1.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
@@ -120,7 +120,6 @@ Available targets:
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_helm_ingress"></a> [helm\_ingress](#module\_helm\_ingress) | dabble-of-devops-bioanalyze/eks-bitnami-nginx-ingress/aws | >= 0.2.0 |
 | <a name="module_merge_values"></a> [merge\_values](#module\_merge\_values) | dabble-of-devops-biodeploy/merge-values/helm | >= 0.2.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
@@ -138,12 +137,7 @@ Available targets:
 | [null_resource.kubectl_apply_cluster_issuer](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.sleep_helm_update](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [random_string.computed_values](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
-| [aws_elb.helm_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb) | data source |
-| [aws_elb.helm_ingress_existing](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb) | data source |
 | [aws_elb.load_balancer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/elb) | data source |
-| [aws_route53_zone.helm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone) | data source |
-| [kubernetes_service.helm_ingress](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service) | data source |
-| [kubernetes_service.helm_ingress_existing](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service) | data source |
 | [kubernetes_service.load_balancer](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/data-sources/service) | data source |
 | [template_file.cluster_issuer](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 | [template_file.ingress](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
@@ -154,8 +148,12 @@ Available targets:
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_tag_map"></a> [additional\_tag\_map](#input\_additional\_tag\_map) | Additional key-value pairs to add to each map in `tags_as_list_of_maps`. Not added to `tags` or `id`.<br>This is for some rare cases where resources want additional configuration of tags<br>and therefore take a list of maps with tag key, value, and additional configuration. | `map(string)` | `{}` | no |
 | <a name="input_attributes"></a> [attributes](#input\_attributes) | ID element. Additional attributes (e.g. `workers` or `cluster`) to add to `id`,<br>in the order they appear in the list. New attributes are appended to the<br>end of the list. The elements of the list are joined by the `delimiter`<br>and treated as a single ID element. | `list(string)` | `[]` | no |
+| <a name="input_aws_elb_dns_name"></a> [aws\_elb\_dns\_name](#input\_aws\_elb\_dns\_name) | Pass in the aws\_elb ingress here | `string` | `""` | no |
+| <a name="input_aws_elb_zone_id"></a> [aws\_elb\_zone\_id](#input\_aws\_elb\_zone\_id) | Pass in the aws\_elb ingress here | `any` | `""` | no |
 | <a name="input_aws_route53_record_name"></a> [aws\_route53\_record\_name](#input\_aws\_route53\_record\_name) | Record name to add to aws\_route\_53. Must be a valid subdomain - www,app,etc | `string` | `"www"` | no |
+| <a name="input_aws_route53_zone_id"></a> [aws\_route53\_zone\_id](#input\_aws\_route53\_zone\_id) | Pass in the aws\_elb ingress here | `string` | `""` | no |
 | <a name="input_aws_route53_zone_name"></a> [aws\_route53\_zone\_name](#input\_aws\_route53\_zone\_name) | Name of the zone to add records. Do not forget the trailing '.' - 'test.com.' | `string` | `"test.com."` | no |
+| <a name="input_cluster_issuer_template"></a> [cluster\_issuer\_template](#input\_cluster\_issuer\_template) | Path to cluster issuer template. Default cluster issuer is supplied. | `string` | `""` | no |
 | <a name="input_context"></a> [context](#input\_context) | Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as `null` to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional\_tag\_map, which are merged. | `any` | <pre>{<br>  "additional_tag_map": {},<br>  "attributes": [],<br>  "delimiter": null,<br>  "descriptor_formats": {},<br>  "enabled": true,<br>  "environment": null,<br>  "id_length_limit": null,<br>  "label_key_case": null,<br>  "label_order": [],<br>  "label_value_case": null,<br>  "labels_as_tags": [<br>    "unset"<br>  ],<br>  "name": null,<br>  "namespace": null,<br>  "regex_replace_chars": null,<br>  "stage": null,<br>  "tags": {},<br>  "tenant": null<br>}</pre> | no |
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter to be used between ID elements.<br>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |
 | <a name="input_descriptor_formats"></a> [descriptor\_formats](#input\_descriptor\_formats) | Describe additional descriptors to be output in the `descriptors` output map.<br>Map of maps. Keys are names of descriptors. Values are maps of the form<br>`{<br>   format = string<br>   labels = list(string)<br>}`<br>(Type is `any` so the map values can later be enhanced to provide additional options.)<br>`format` is a Terraform format string to be passed to the `format()` function.<br>`labels` is a list of labels, in order, to pass to `format()` function.<br>Label values will be normalized before being passed to `format()` so they will be<br>identical to how they appear in `id`.<br>Default is `{}` (`descriptors` output will be empty). | `any` | `{}` | no |
@@ -178,7 +176,7 @@ Available targets:
 | <a name="input_helm_release_wait"></a> [helm\_release\_wait](#input\_helm\_release\_wait) | Tell terraform to wait until the service comes up. | `bool` | `true` | no |
 | <a name="input_id_length_limit"></a> [id\_length\_limit](#input\_id\_length\_limit) | Limit `id` to this many characters (minimum 6).<br>Set to `0` for unlimited length.<br>Set to `null` for keep the existing setting, which defaults to `0`.<br>Does not affect `id_full`. | `number` | `null` | no |
 | <a name="input_ingress_template"></a> [ingress\_template](#input\_ingress\_template) | Path to ingress template. Ingress compatible with bitnami is given. | `string` | `""` | no |
-| <a name="input_install_ingress"></a> [install\_ingress](#input\_install\_ingress) | Install the ingress helm chart. No will only fill out the cluster issuer, yes fills out the cluster issuer and installs. | `bool` | `true` | no |
+| <a name="input_install_ingress"></a> [install\_ingress](#input\_install\_ingress) | Deprecated: Install the ingress helm chart. No will only fill out the cluster issuer, yes fills out the cluster issuer and installs. | `bool` | `true` | no |
 | <a name="input_label_key_case"></a> [label\_key\_case](#input\_label\_key\_case) | Controls the letter case of the `tags` keys (label names) for tags generated by this module.<br>Does not affect keys of tags passed in via the `tags` input.<br>Possible values: `lower`, `title`, `upper`.<br>Default value: `title`. | `string` | `null` | no |
 | <a name="input_label_order"></a> [label\_order](#input\_label\_order) | The order in which the labels (ID elements) appear in the `id`.<br>Defaults to ["namespace", "environment", "stage", "name", "attributes"].<br>You can omit any of the 6 labels ("tenant" is the 6th), but at least one must be present. | `list(string)` | `null` | no |
 | <a name="input_label_value_case"></a> [label\_value\_case](#input\_label\_value\_case) | Controls the letter case of ID elements (labels) as included in `id`,<br>set as tag values, and output by this module individually.<br>Does not affect values of tags passed in via the `tags` input.<br>Possible values: `lower`, `title`, `upper` and `none` (no transformation).<br>Set this to `title` and set `delimiter` to `""` to yield Pascal Case IDs.<br>Default value: `lower`. | `string` | `null` | no |
@@ -199,13 +197,11 @@ Available targets:
 
 | Name | Description |
 |------|-------------|
-| <a name="output_aws_elb_ingress"></a> [aws\_elb\_ingress](#output\_aws\_elb\_ingress) | n/a |
 | <a name="output_aws_elb_load_balancer"></a> [aws\_elb\_load\_balancer](#output\_aws\_elb\_load\_balancer) | n/a |
 | <a name="output_aws_route53_record_cluster_ip"></a> [aws\_route53\_record\_cluster\_ip](#output\_aws\_route53\_record\_cluster\_ip) | n/a |
 | <a name="output_aws_route53_record_load_balancer"></a> [aws\_route53\_record\_load\_balancer](#output\_aws\_route53\_record\_load\_balancer) | n/a |
+| <a name="output_helm_release"></a> [helm\_release](#output\_helm\_release) | n/a |
 | <a name="output_id"></a> [id](#output\_id) | ID of the created example |
-| <a name="output_ingress_template"></a> [ingress\_template](#output\_ingress\_template) | n/a |
-| <a name="output_kubernetes_service"></a> [kubernetes\_service](#output\_kubernetes\_service) | n/a |
 | <a name="output_kubernetes_service_helm"></a> [kubernetes\_service\_helm](#output\_kubernetes\_service\_helm) | n/a |
 | <a name="output_ssl_type"></a> [ssl\_type](#output\_ssl\_type) | n/a |
 <!-- markdownlint-restore -->
@@ -403,4 +399,3 @@ BioAnalyze is and will always be open source. If you've found any of these resou
   [share_googleplus]: https://plus.google.com/share?url=https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-helm
   [share_email]: mailto:?subject=Terraform+AWS+EKS+Helm+Chart+++Route53+Bootstrap+Module&body=https://github.com/dabble-of-devops-bioanalyze/terraform-aws-eks-helm
   [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/dabble-of-devops-bioanalyze/terraform-aws-eks-helm?pixel&cs=github&cm=readme&an=terraform-aws-eks-helm
-

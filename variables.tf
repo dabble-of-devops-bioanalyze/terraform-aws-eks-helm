@@ -148,7 +148,7 @@ variable "cluster_issuer_template" {
 
 variable "install_ingress" {
   type        = bool
-  description = "Install the ingress helm chart. No will only fill out the cluster issuer, yes fills out the cluster issuer and installs. "
+  description = "Deprecated: Install the ingress helm chart. No will only fill out the cluster issuer, yes fills out the cluster issuer and installs. "
   default     = true
 }
 
@@ -180,4 +180,22 @@ variable "existing_ingress_namespace" {
   type        = string
   description = "Existing ingress release namespace"
   default     = "default"
+}
+
+variable "aws_route53_zone_id" {
+  type = string
+  description = "Pass in the aws_elb ingress here"
+  default = ""
+}
+
+variable "aws_elb_dns_name" {
+  type = string
+  description = "Pass in the aws_elb ingress here"
+  default = ""
+}
+
+variable "aws_elb_zone_id" {
+  type = any
+  description = "Pass in the aws_elb ingress here"
+  default = ""
 }
