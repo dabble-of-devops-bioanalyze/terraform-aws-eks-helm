@@ -14,25 +14,22 @@
 ingress:
   enabled: true
   tls: true
-  apiVersion: ""
   pathType: ImplementationSpecific
   certManager: true
   hostname: ${aws_route53_record_name}.${aws_route53_domain_name}
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ## Example:
-  ## kubernetes.io/ingress.class: nginx
-  ##
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: ${helm_release_name}-letsencrypt
     nginx.ingress.kubernetes.io/rewrite-target: /
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  ##
-  extraHosts:
-    - hosts:
-        - ${aws_route53_record_name}.${aws_route53_domain_name}
-      secretName: ${helm_release_name}.local-tls
+    kubernetes.io/tls-acme: "true"
+    ingress.kubernetes.io/secure-backends: "true"

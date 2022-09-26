@@ -3,8 +3,7 @@
 #######################################################
 
 locals {
-  ingress_template        = length(var.ingress_template) > 0 ? var.ingress_template : "${path.module}/helm_charts/bitnami/ingress.yaml.tpl"
-  cluster_issuer_template = length(var.cluster_issuer_template) > 0 ? var.cluster_issuer_template : "${path.module}/helm_charts/cluster-issuer.yaml.tpl"
+  ingress_template = length(var.ingress_template) > 0 ? var.ingress_template : "${path.module}/helm_charts/bitnami/ingress.yaml.tpl"
 }
 
 resource "null_resource" "helm_dirs" {
@@ -34,68 +33,57 @@ resource "null_resource" "create_merged_file" {
     local.helm_release_merged_values_file,
     random_string.computed_values
   ]
-  triggers = {
-    always_run = timestamp()
-  }
   provisioner "local-exec" {
     command = <<EOT
     mkdir -p ${var.helm_release_values_dir}
     touch ${local.helm_release_merged_values_file}
-    touch ${var.helm_release_values_dir}/cluster-issuer.yaml
     touch ${var.helm_release_values_dir}/ingress.yaml
     EOT
   }
 }
 
 # #################################################################
-# # Case: Use Existing Ingress
+# https://cert-manager.io/docs/release-notes/release-notes-0.11/
 # #################################################################
 
-# If we are using an existing helm_ingress we'll still need to render a clusterissuer
-# This is duplicated from the nginx-ingress module
-
-data "template_file" "cluster_issuer" {
-  count    = var.enable_ssl == true && var.render_cluster_issuer == true ? 1 : 0
-  template = file(local.cluster_issuer_template)
-  vars = {
-    name              = trimspace(var.helm_release_name)
-    letsencrypt_email = trimspace(var.letsencrypt_email)
+resource "kubernetes_manifest" "letsencrypt" {
+  count    = var.enable_ssl == true ? 1 : 0
+  manifest = {
+    "apiVersion" = "cert-manager.io/v1"
+    #    "apiVersion" = "cert-manager.io/v1alpha2"
+    "kind"       = "ClusterIssuer"
+    "metadata"   = {
+      "name" = "${var.helm_release_name}-letsencrypt"
+    }
+    "spec" = {
+      "acme" = {
+        "email"               = var.letsencrypt_email
+        "privateKeySecretRef" = {
+          "name" = "${var.helm_release_name}-letsencrypt"
+        }
+        "server"  = "https://acme-v02.api.letsencrypt.org/directory"
+        "solvers" = [
+          {
+            "http01" = {
+              "ingress" = {
+                "class" = "nginx"
+              }
+            }
+          },
+        ]
+      }
+    }
   }
 }
 
-resource "local_file" "cluster_issuer" {
-  count = var.enable_ssl == true && var.render_cluster_issuer ? 1 : 0
-  depends_on = [
-    data.template_file.cluster_issuer
-  ]
-  content  = data.template_file.cluster_issuer[0].rendered
-  filename = "${var.helm_release_values_dir}/cluster-issuer.yaml"
-}
+#########################################################
+## Generate Ingress
+#########################################################
 
-resource "null_resource" "kubectl_apply_cluster_issuer" {
-  count = var.enable_ssl == true && var.render_cluster_issuer == true ? 1 : 0
-  depends_on = [
-    local_file.cluster_issuer
-  ]
-  provisioner "local-exec" {
-    command = <<EOT
-     mkdir -p ${var.helm_release_values_dir}
-     kubectl apply -f ${var.helm_release_values_dir}/cluster-issuer.yaml
-     EOT
-  }
-}
-
-# ########################################################
-# # Get the ingress
-# ########################################################
-
-# # TODO
-# # Default uses a bitnami ingress setup. All bitnami charts use the same structure
-# # Should check first if it's a bitnami chart, and if not warn
 data "template_file" "ingress" {
   count    = var.enable_ssl == true && var.render_ingress ? 1 : 0
   template = file(local.ingress_template)
-  vars = {
+  vars     = {
     helm_release_name       = var.helm_release_name
     aws_route53_record_name = var.aws_route53_record_name
     aws_route53_domain_name = trimsuffix(var.aws_route53_zone_name, ".")
@@ -104,7 +92,7 @@ data "template_file" "ingress" {
 }
 
 resource "local_file" "rendered_ingress" {
-  count = var.enable_ssl == true && var.render_ingress ? 1 : 0
+  count      = var.enable_ssl == true && var.render_ingress ? 1 : 0
   depends_on = [
     data.template_file.ingress
   ]
@@ -139,29 +127,19 @@ module "merge_values" {
   helm_release_merged_values_file = local.helm_release_merged_values_file
 }
 
-# # TODO add in option for helm release vs rancher release
 resource "helm_release" "helm" {
   depends_on = [
+    kubernetes_manifest.letsencrypt,
     module.merge_values,
   ]
   name             = var.helm_release_name
   repository       = var.helm_release_repository
   chart            = var.helm_release_chart
-  version          = var.helm_release_version
+  #  version          = var.helm_release_version
   namespace        = var.helm_release_namespace
   create_namespace = var.helm_release_create_namespace
   wait             = var.helm_release_wait
-
-  #TODO Caution against
-  dynamic "set" {
-    for_each = var.helm_release_sets
-    content {
-      name  = set.value["name"]
-      value = set.value["value"]
-      # must be one of auto or string
-      type = set.value["type"] == "string" ? set.value["type"] : "auto"
-    }
-  }
+  timeout          = 600
 
   values = [file(local.helm_release_merged_values_file)]
 }
@@ -169,105 +147,4 @@ resource "helm_release" "helm" {
 output "helm_release" {
   value     = helm_release.helm
   sensitive = true
-}
-
-resource "null_resource" "sleep_helm_update" {
-  depends_on = [
-    helm_release.helm
-  ]
-  provisioner "local-exec" {
-    command = <<EOT
-    echo "Waiting for the helm service to come up"
-    sleep 5m
-    EOT
-  }
-}
-
-# #########################################################################
-# # AWS Route 53 Assign
-# #########################################################################
-
-# #########################################################################
-# # Helm Release Service Type == LoadBalancer
-# #########################################################################
-
-data "kubernetes_service" "load_balancer" {
-  count = var.helm_release_values_service_type == "LoadBalancer" ? 1 : 0
-  depends_on = [
-    helm_release.helm,
-    null_resource.sleep_helm_update
-  ]
-  metadata {
-    name      = var.helm_release_name
-    namespace = var.helm_release_namespace
-  }
-}
-
-output "kubernetes_service_helm" {
-  value = data.kubernetes_service.load_balancer
-}
-
-data "aws_elb" "load_balancer" {
-  count = var.helm_release_values_service_type == "LoadBalancer" ? 1 : 0
-  depends_on = [
-    helm_release.helm,
-    data.kubernetes_service.load_balancer,
-  ]
-  name = split("-", data.kubernetes_service.load_balancer[0].status.0.load_balancer.0.ingress.0.hostname)[0]
-}
-
-output "aws_elb_load_balancer" {
-  value = data.aws_elb.load_balancer
-}
-
-resource "aws_route53_record" "load_balancer" {
-  count = var.enable_ssl && var.helm_release_values_service_type == "LoadBalancer" ? 1 : 0
-  depends_on = [
-    helm_release.helm,
-  ]
-  zone_id = var.aws_route53_zone_id
-  name    = var.aws_route53_record_name
-  type    = "A"
-  alias {
-    name                   = data.aws_elb.load_balancer[0].dns_name
-    zone_id                = data.aws_elb.load_balancer[0].zone_id
-    evaluate_target_health = true
-  }
-}
-
-output "aws_route53_record_load_balancer" {
-  value = aws_route53_record.load_balancer
-}
-
-#########################################################################
-# Helm Release Service Type
-# helm_release_values_service_type == ClusterIP and var.enable_ssl = true
-#########################################################################
-
-resource "aws_route53_record" "cluster_ip" {
-  count = var.enable_ssl && var.helm_release_values_service_type == "ClusterIP" ? 1 : 0
-  depends_on = [
-    helm_release.helm,
-  ]
-  zone_id = var.aws_route53_zone_id
-  name    = var.aws_route53_record_name
-  type    = "A"
-  alias {
-    name                   = var.aws_elb_dns_name
-    zone_id                = var.aws_elb_zone_id
-    evaluate_target_health = true
-  }
-}
-
-output "aws_route53_record_cluster_ip" {
-  value = aws_route53_record.cluster_ip
-}
-
-locals {
-  ssl_type = var.enable_ssl && var.helm_release_values_service_type == "ClusterIP" ? "cluster_ip" : "load_balancer"
-  dns_record = var.enable_ssl && var.helm_release_values_service_type == "ClusterIP" ? aws_route53_record.cluster_ip : aws_route53_record.load_balancer
-}
-
-output "ssl_type" {
-  value = local.ssl_type
 }

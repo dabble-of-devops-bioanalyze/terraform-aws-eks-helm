@@ -1,5 +1,6 @@
-apiVersion: cert-manager.io/v1alpha2
-kind: ClusterIssuer
+apiVersion: cert-manager.io/v1
+#kind: ClusterIssuer
+kind: Issuer
 metadata:
   name: ${name}-letsencrypt
   labels:
@@ -7,9 +8,10 @@ metadata:
 spec:
   acme:
     email: ${letsencrypt_email}
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    #server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: ${name}-letsencrypt
-    server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
     - http01:
         ingress:
