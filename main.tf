@@ -50,7 +50,6 @@ resource "kubernetes_manifest" "letsencrypt" {
   count    = var.enable_ssl == true ? 1 : 0
   manifest = {
     "apiVersion" = "cert-manager.io/v1"
-    #    "apiVersion" = "cert-manager.io/v1alpha2"
     "kind"       = "ClusterIssuer"
     "metadata"   = {
       "name" = "${var.helm_release_name}-letsencrypt"
@@ -135,7 +134,7 @@ resource "helm_release" "helm" {
   name             = var.helm_release_name
   repository       = var.helm_release_repository
   chart            = var.helm_release_chart
-  #  version          = var.helm_release_version
+  version          = var.helm_release_version
   namespace        = var.helm_release_namespace
   create_namespace = var.helm_release_create_namespace
   wait             = var.helm_release_wait
